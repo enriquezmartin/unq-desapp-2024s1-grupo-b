@@ -13,7 +13,7 @@ class User {
     var id: Long? = null
 
     @NotNull
-    @Column(nullable = false, columnDefinition = "INT CHECK (tu_columna >= 0 AND tu_columna <= 100)")
+    @Column(nullable = false)
     lateinit var name: String
 
     lateinit var surname: String
