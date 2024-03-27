@@ -29,7 +29,7 @@ dependencies {
 	runtimeOnly("com.h2database:h2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
-	implementation("mysql:mysql-connector-java:5.1.6")
+	runtimeOnly("mysql:mysql-connector-java:8.0.33")
 
 
 }
