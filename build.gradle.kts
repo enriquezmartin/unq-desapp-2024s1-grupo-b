@@ -42,6 +42,11 @@ dependencies {
 // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-root
 	implementation("io.jsonwebtoken:jjwt-root:0.12.5")
 	implementation("javax.validation:validation-api:2.0.1.Final")
+
+	// Swagger dependencies.
+	implementation("org.springdoc:springdoc-openapi-data-rest:1.6.0")
+	implementation("org.springdoc:springdoc-openapi-ui:1.6.0")
+	implementation("org.springdoc:springdoc-openapi-kotlin:1.6.0")
 }
 
 tasks.withType<KotlinCompile> {
