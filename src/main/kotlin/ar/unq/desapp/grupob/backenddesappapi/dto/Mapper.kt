@@ -1,4 +1,4 @@
-package ar.unq.desapp.grupob.backenddesappapi.DTO
+package ar.unq.desapp.grupob.backenddesappapi.dto
 
 import ar.unq.desapp.grupob.backenddesappapi.model.UserEntity
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,7 +13,7 @@ class Mapper {
     lateinit var encoder: PasswordEncoder
 
     fun fromRegisterDTOtoUser(dto: RegisterDTO): UserEntity{
-        var user: UserEntity = UserEntity()
+        val user = UserEntity()
         user.username = dto.username
         user.password = encoder.encode(dto.password)
         return user
