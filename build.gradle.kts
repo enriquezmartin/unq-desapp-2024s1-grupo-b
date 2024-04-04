@@ -41,6 +41,7 @@ dependencies {
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.5")
 // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-root
 	implementation("io.jsonwebtoken:jjwt-root:0.12.5")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 	implementation("javax.validation:validation-api:2.0.1.Final")
 }
 
