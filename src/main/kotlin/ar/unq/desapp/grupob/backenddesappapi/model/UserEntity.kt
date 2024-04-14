@@ -6,6 +6,9 @@ import org.jetbrains.annotations.NotNull
 @Entity
 @Table(name = "users")
 class UserEntity(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null,
     @NotNull
     @Column(nullable = false, unique = true)
     var username: String?,
@@ -17,12 +20,6 @@ class UserEntity(
     var cvu: String?,
     var walletAddress: String?
 ){
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
-
-
 
     @ManyToMany(fetch = FetchType.EAGER, targetEntity = RoleEntity :: class, cascade = arrayOf(CascadeType.PERSIST))
     @JoinTable(name = "user_profile",

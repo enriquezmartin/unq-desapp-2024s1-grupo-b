@@ -4,6 +4,7 @@ import ar.unq.desapp.grupob.backenddesappapi.model.UserEntity
 
 class UserBuilder(){
 
+    private var id: Long? = null
     private var name: String? = null
     private var username: String? = null
     private var address: String? = null
@@ -14,8 +15,13 @@ class UserBuilder(){
     private var walletAddress: String? = null
 
     fun build(): UserEntity{
-        val user: UserEntity = UserEntity(username, password, name, surname, email, address, cvuMP, walletAddress)
+        val user: UserEntity = UserEntity(id, username, password, name, surname, email, address, cvuMP, walletAddress)
         return user
+    }
+
+    fun withId(id: Long): UserBuilder{
+        this.id = id
+        return this
     }
 
     fun withName(name: String): UserBuilder {

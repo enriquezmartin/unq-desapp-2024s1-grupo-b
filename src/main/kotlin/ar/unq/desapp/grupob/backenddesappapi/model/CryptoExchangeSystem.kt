@@ -1,9 +1,42 @@
 package ar.unq.desapp.grupob.backenddesappapi.model
 
 import ar.unq.desapp.grupob.backenddesappapi.utlis.UserCannotBeRegisteredException
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 class CryptoExchangeSystem {
+
+    val users: MutableSet<UserEntity> = mutableSetOf()
+    val prices: MutableMap<CryptoCurrency, MutableList<Price>> = mutableMapOf<CryptoCurrency, MutableList<Price>>()
+
     fun register(user: UserEntity) {
+        validUser(user)
+        users.add(user)
+    }
+    fun getPricesFor(cryptoCurrency: CryptoCurrency): MutableList<Price> {
+        return prices.getOrDefault(cryptoCurrency, mutableListOf())
+    }
+
+    fun registerPrice(cryptoCurrency: CryptoCurrency, price: Price) {
+        val pricesForCryptoCurrency = getPricesFor(cryptoCurrency)
+        pricesForCryptoCurrency.add(price)
+        prices[cryptoCurrency] = pricesForCryptoCurrency
+    }
+    fun getPricesForTheLast24hs(cryptoCurrency: CryptoCurrency): List<Price> {
+        val now = LocalDate.now()
+        val minus24hs = now.minus(1, ChronoUnit.DAYS)
+        return getPricesFor(cryptoCurrency).filter {
+            (it.priceTime.isAfter(minus24hs) || it.priceTime.isEqual(minus24hs)) && (it.priceTime.isBefore(now) || it.priceTime.isEqual(now))
+        }
+    }
+
+
+    fun getUserById(id: Long): UserEntity? {
+        return users.find {it.id == id}
+    }
+
+    private fun validUser(user: UserEntity){
         val emailPattern = Regex("^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})")
         val passwordPattern = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*[\\W_]).{6,}\$")
         val cvuPattern = Regex("^\\d{22}$")
