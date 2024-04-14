@@ -29,6 +29,7 @@ dependencies {
 	runtimeOnly("com.mysql:mysql-connector-j")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
+	testImplementation("org.mockito:mockito-core:3.10.0")
 	implementation("org.springframework.boot:spring-boot-starter-security:3.2.4")
 	implementation("org.springframework.security:spring-security-core:6.2.3")
 // https://mvnrepository.com/artifact/mysql/mysql-connector-java

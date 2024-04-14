@@ -33,7 +33,7 @@ class AuthController {
     fun register(@RequestBody userDTO: RegisterDTO): String{
         try {
             var user = mapper.fromRegisterDTOtoUser(userDTO)
-            var token = jwtUtils.generateAccessToken(user.username)
+            var token = jwtUtils.generateAccessToken(user.username!!)
             userDao.save(user)
             return token
         } catch (e: Exception){ return "fail ${e.message} "}

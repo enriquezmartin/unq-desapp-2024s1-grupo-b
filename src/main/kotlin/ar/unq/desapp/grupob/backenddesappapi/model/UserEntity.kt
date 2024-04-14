@@ -5,24 +5,25 @@ import org.jetbrains.annotations.NotNull
 
 @Entity
 @Table(name = "users")
-
-class UserEntity {
+class UserEntity(
+    @NotNull
+    @Column(nullable = false, unique = true)
+    var username: String?,
+    var password: String?,
+    var name: String?,
+    var surname: String?,
+    var email: String?,
+    var address: String?,
+    var cvu: String?,
+    var walletAddress: String?
+){
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
-    @NotNull
-    @Column(nullable = false)
-    lateinit var username: String
-    lateinit var password: String
-    /*lateinit var name: String
-    lateinit var surname: String
-    lateinit var email: String
-    lateinit var address: String
-    lateinit var cvuMP: String
-    lateinit var walletAddress: String
-*/
+
+
     @ManyToMany(fetch = FetchType.EAGER, targetEntity = RoleEntity :: class, cascade = arrayOf(CascadeType.PERSIST))
     @JoinTable(name = "user_profile",
         joinColumns = [JoinColumn(name = "user_id")],
