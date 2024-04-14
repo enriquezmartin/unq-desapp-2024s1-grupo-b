@@ -2,7 +2,9 @@ package ar.unq.desapp.grupob.backenddesappapi.model
 
 import ar.unq.desapp.grupob.backenddesappapi.helpers.UserBuilder
 import ar.unq.desapp.grupob.backenddesappapi.utlis.UserCannotBeRegisteredException
+import ar.unq.desapp.grupob.backenddesappapi.utlis.UserNotRegisteredException
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -272,6 +274,54 @@ class CryptoExchangeSystemTest {
     inner class PurchaseSaleIntent{
 
         private val system: CryptoExchangeSystem = CryptoExchangeSystem()
+        val user:UserEntity = UserBuilder()
+            .withName("a valid name")
+            .withId(1L)
+            .withSurname("a valid surname")
+            .withEmail("valid@email.com")
+            .withWalletAddress("12345678")
+            .withCvuMP("1234567890123456789012")
+            .withAddress("a valid address")
+            .withPassword("a_Password")
+            .build()
+
+        @BeforeEach
+        fun setup(){
+            system.register(user)
+        }
+
+        @Test
+        fun `A non existent user cannot post`(){
+            val expectedMessage: String = "The user does not exist"
+
+            val exceptionMessageForNonExistentUser: String = assertThrows<UserNotRegisteredException> { system.getPostByUser(2L)}.message
+
+            assertEquals(expectedMessage, exceptionMessageForNonExistentUser)
+        }
+
+        @Test
+        fun `New user has zero posts`(){
+            val result: MutableSet<Post> = system.getPostByUser(1L)
+
+            assertTrue(result.isEmpty())
+        }
+
+        @Test
+        fun `User successfully posts an intent`(){
+            val post: Post = Post(CryptoCurrency.ALICEUSDT, 100.0F, 20.0F, OperationType.PURCHASE)
+            system.addPost(post, user.id!!)
+            val posts: MutableSet<Post> = system.getPostByUser(1L)
+
+            assertTrue(posts.isNotEmpty())
+            assertEquals(posts.first().user!!.id, 1L)
+            assertEquals(posts.first().createdDate, LocalDate.now())
+            assertEquals(posts.first().priceInArs, post.priceInArs)
+            assertEquals(posts.first().cryptoCurrency, post.cryptoCurrency)
+            assertEquals(posts.first().amount, post.amount)
+            assertEquals(posts.first().price, post.price)
+            assertEquals(posts.first().operationType, post.operationType)
+        }
+
         @Test
         fun asd(){
 

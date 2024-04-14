@@ -1,9 +1,15 @@
 package ar.unq.desapp.grupob.backenddesappapi.model
 
-class Post(val cryptoCurrency: CryptoCurrency, val amount: Float, val price: Price, val user: UserEntity, val operationType: OperationType){
+import java.time.LocalDate
+
+class Post(val cryptoCurrency: CryptoCurrency, val amount: Float, val price: Float, val operationType: OperationType){
 
     val priceInArs: Float
         get() {
-            return amount * price.value
+            return amount * price
         }
+
+    var user: UserEntity? = null
+
+    var createdDate: LocalDate? = null
 }

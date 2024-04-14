@@ -1,14 +1,27 @@
 package ar.unq.desapp.grupob.backenddesappapi.model
 
 import ar.unq.desapp.grupob.backenddesappapi.utlis.UserCannotBeRegisteredException
+import ar.unq.desapp.grupob.backenddesappapi.utlis.UserNotRegisteredException
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
 class CryptoExchangeSystem {
 
-    val users: MutableSet<UserEntity> = mutableSetOf()
-    val prices: MutableMap<CryptoCurrency, MutableList<Price>> = mutableMapOf<CryptoCurrency, MutableList<Price>>()
+    private val users: MutableSet<UserEntity> = mutableSetOf()
+    private val prices: MutableMap<CryptoCurrency, MutableList<Price>> = mutableMapOf<CryptoCurrency, MutableList<Price>>()
+    private val posts: MutableSet<Post> = mutableSetOf()
+
+    fun addPost(post: Post, userId: Long) {
+        val userRegistered: UserEntity? = getUserById(userId) ?: throw UserNotRegisteredException("The user does not exist")
+        post.user = userRegistered
+        post.createdDate = LocalDate.now()
+        posts.add(post)
+    }
+
+    fun getPostByUser(userId: Long): MutableSet<Post>{
+        val userRegistered: UserEntity? = getUserById(userId) ?: throw UserNotRegisteredException("The user does not exist")
+        return posts.filter { it.user!!.id == userId }.toMutableSet()
+    }
 
     fun register(user: UserEntity) {
         validUser(user)
