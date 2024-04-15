@@ -1,5 +1,6 @@
 package ar.unq.desapp.grupob.backenddesappapi.model
 
+import ar.unq.desapp.grupob.backenddesappapi.DTO.IntentItem
 import ar.unq.desapp.grupob.backenddesappapi.helpers.UserBuilder
 import ar.unq.desapp.grupob.backenddesappapi.utlis.UserCannotBeRegisteredException
 import ar.unq.desapp.grupob.backenddesappapi.utlis.UserNotRegisteredException
@@ -274,7 +275,7 @@ class CryptoExchangeSystemTest {
     inner class PurchaseSaleIntent{
 
         private val system: CryptoExchangeSystem = CryptoExchangeSystem()
-        val user:UserEntity = UserBuilder()
+        private val user:UserEntity = UserBuilder()
             .withName("a valid name")
             .withId(1L)
             .withSurname("a valid surname")
@@ -294,7 +295,9 @@ class CryptoExchangeSystemTest {
         fun `A non existent user cannot post`(){
             val expectedMessage: String = "The user does not exist"
 
-            val exceptionMessageForNonExistentUser: String = assertThrows<UserNotRegisteredException> { system.getPostByUser(2L)}.message
+            val exceptionMessageForNonExistentUser: String = assertThrows<UserNotRegisteredException> { system.getPostByUser(
+                2L,
+            )}.message
 
             assertEquals(expectedMessage, exceptionMessageForNonExistentUser)
         }
@@ -308,7 +311,7 @@ class CryptoExchangeSystemTest {
 
         @Test
         fun `User successfully posts an intent`(){
-            val post: Post = Post(CryptoCurrency.ALICEUSDT, 100.0F, 20.0F, OperationType.PURCHASE)
+            val post: Post = Post(1L, CryptoCurrency.ALICEUSDT, 100.0F, 20.0F, OperationType.PURCHASE)
             system.addPost(post, user.id!!)
             val posts: MutableSet<Post> = system.getPostByUser(1L)
 
@@ -323,9 +326,36 @@ class CryptoExchangeSystemTest {
         }
 
         @Test
-        fun asd(){
+        fun `When a user registers two intents, one for purchase and one for sale, and one type is requested, these are the ones retrieved`(){
+            val purchaseIntentPost: Post = Post(1L, CryptoCurrency.ALICEUSDT, 100.0F, 20.0F, OperationType.PURCHASE)
+            val saleIntentPost: Post = Post(2L, CryptoCurrency.ALICEUSDT, 100.0F, 20.0F, OperationType.SALE)
+            system.addPost(purchaseIntentPost, 1L)
+            system.addPost(saleIntentPost, 1L)
 
+            val activePurchaseIntents: List<IntentItem> = system.activePostByUserAndType(1L, OperationType.PURCHASE)
+
+            assertTrue(activePurchaseIntents.size == 1)
+            assertEquals(activePurchaseIntents[0].operationType, OperationType.PURCHASE)
+            assertEquals(activePurchaseIntents[0].user, "${user.name} ${user.surname}")
+            assertEquals(activePurchaseIntents[0].operations, 0)
+            assertEquals(activePurchaseIntents[0].reputation, "No operations")
+        }
+
+        @Test
+        fun asd(){
+            val purchaseIntentPost: Post = Post(1L, CryptoCurrency.ALICEUSDT, 100.0F, 20.0F, OperationType.SALE)
+            system.addPost(purchaseIntentPost, 1L)
+            val interestedUser:UserEntity = UserBuilder()
+                .withName("a valid name")
+                .withId(2L)
+                .withSurname("a valid surname")
+                .withEmail("valid@email.com")
+                .withWalletAddress("12345678")
+                .withCvuMP("1234567890123456789012")
+                .withAddress("a valid address")
+                .withPassword("a_Password")
+                .build()
+            system.wireTransferNotice(purchaseIntentPost.id!!, interestedUser.id)
         }
     }
-
 }

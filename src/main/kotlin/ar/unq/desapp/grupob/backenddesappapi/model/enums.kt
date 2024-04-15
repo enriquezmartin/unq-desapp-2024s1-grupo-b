@@ -6,7 +6,9 @@ enum class CryptoCurrency {
     CAKEUSDT, BTCUSDT, BNBUSDT, ADAUSDT,
     TRXUSDT, AUDIOUSDT
 }
-
 enum class OperationType {
     PURCHASE, SALE
+}
+enum class StatusPost{
+    ACTIVE, CLOSED, IN_PROGRESS
 }

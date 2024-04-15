@@ -1,5 +1,6 @@
 package ar.unq.desapp.grupob.backenddesappapi.model
 
+import ar.unq.desapp.grupob.backenddesappapi.DTO.IntentItem
 import ar.unq.desapp.grupob.backenddesappapi.utlis.UserCannotBeRegisteredException
 import ar.unq.desapp.grupob.backenddesappapi.utlis.UserNotRegisteredException
 import java.time.LocalDate
@@ -11,6 +12,26 @@ class CryptoExchangeSystem {
     private val prices: MutableMap<CryptoCurrency, MutableList<Price>> = mutableMapOf<CryptoCurrency, MutableList<Price>>()
     private val posts: MutableSet<Post> = mutableSetOf()
 
+
+    fun activePostByUserAndType(userId: Long, operation: OperationType): List<IntentItem> {
+        val result = getPostByUser(userId)
+            .filter { it.operationType == operation }
+            .map { post ->
+                val reputation: String = if (post.user!!.operations == 0)  "No operations" else post.user!!.operations.toString()
+                IntentItem(
+                    post.createdDate!!,
+                    post.cryptoCurrency,
+                    post.operationType,
+                    post.amount,
+                    post.price,
+                    post.priceInArs,
+                    "${post.user!!.name} ${post.user!!.surname}",
+                    post.user!!.operations,
+                    reputation)
+            }
+        return result
+    }
+
     fun addPost(post: Post, userId: Long) {
         val userRegistered: UserEntity? = getUserById(userId) ?: throw UserNotRegisteredException("The user does not exist")
         post.user = userRegistered
@@ -20,7 +41,7 @@ class CryptoExchangeSystem {
 
     fun getPostByUser(userId: Long): MutableSet<Post>{
         val userRegistered: UserEntity? = getUserById(userId) ?: throw UserNotRegisteredException("The user does not exist")
-        return posts.filter { it.user!!.id == userId }.toMutableSet()
+        return posts.filter { it.user!!.id == userId}.toMutableSet()
     }
 
     fun register(user: UserEntity) {
@@ -44,7 +65,6 @@ class CryptoExchangeSystem {
         }
     }
 
-
     fun getUserById(id: Long): UserEntity? {
         return users.find {it.id == id}
     }
@@ -67,6 +87,13 @@ class CryptoExchangeSystem {
     private fun checkNullAndApply(value: String?, property: String, function: (value: String, property: String) ->  Unit) {
         if(value == null) throw UserCannotBeRegisteredException("The $property cannot be null")
         function(value, property)
+    }
+
+    fun wireTransferNotice(postId: Long, interestedUserId: Long?) {
+        val interestedUser = getUserById(interestedUserId!!)
+        val post = posts.find { it.id == postId }
+        posts.remove(post)
+        post!!.status = StatusPost.IN_PROGRESS
     }
 
     private val checkForPattern: (pattern: Regex, errorMessage: String) -> (value: String, property: String) -> Unit = {

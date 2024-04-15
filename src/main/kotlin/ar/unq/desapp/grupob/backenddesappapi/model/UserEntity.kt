@@ -18,8 +18,12 @@ class UserEntity(
     var email: String?,
     var address: String?,
     var cvu: String?,
-    var walletAddress: String?
+    var walletAddress: String?,
+    var operations: Int = 0,
+    var points: Int = 0
 ){
+
+
 
     @ManyToMany(fetch = FetchType.EAGER, targetEntity = RoleEntity :: class, cascade = arrayOf(CascadeType.PERSIST))
     @JoinTable(name = "user_profile",
