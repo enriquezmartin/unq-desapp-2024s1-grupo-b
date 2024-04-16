@@ -285,6 +285,16 @@ class CryptoExchangeSystemTest {
             .withAddress("a valid address")
             .withPassword("a_Password")
             .build()
+        private val interestedUser:UserEntity = UserBuilder()
+            .withName("a valid name")
+            .withId(2L)
+            .withSurname("a valid surname")
+            .withEmail("valid@email.com")
+            .withWalletAddress("12345678")
+            .withCvuMP("1234567890123456789012")
+            .withAddress("a valid address")
+            .withPassword("a_Password")
+            .build()
 
         @BeforeEach
         fun setup(){
@@ -342,19 +352,10 @@ class CryptoExchangeSystemTest {
         }
 
         @Test
-        fun asd(){
+        fun `when a purchase is `(){
             val purchaseIntentPost: Post = Post(1L, CryptoCurrency.ALICEUSDT, 100.0F, 20.0F, OperationType.SALE)
             system.addPost(purchaseIntentPost, 1L)
-            val interestedUser:UserEntity = UserBuilder()
-                .withName("a valid name")
-                .withId(2L)
-                .withSurname("a valid surname")
-                .withEmail("valid@email.com")
-                .withWalletAddress("12345678")
-                .withCvuMP("1234567890123456789012")
-                .withAddress("a valid address")
-                .withPassword("a_Password")
-                .build()
+
             system.wireTransferNotice(purchaseIntentPost.id!!, interestedUser.id)
         }
     }

@@ -33,14 +33,14 @@ class CryptoExchangeSystem {
     }
 
     fun addPost(post: Post, userId: Long) {
-        val userRegistered: UserEntity? = getUserById(userId) ?: throw UserNotRegisteredException("The user does not exist")
+        val userRegistered: UserEntity = getUserById(userId) ?: throw UserNotRegisteredException("The user does not exist")
         post.user = userRegistered
         post.createdDate = LocalDate.now()
         posts.add(post)
     }
 
     fun getPostByUser(userId: Long): MutableSet<Post>{
-        val userRegistered: UserEntity? = getUserById(userId) ?: throw UserNotRegisteredException("The user does not exist")
+        getUserById(userId) ?: throw UserNotRegisteredException("The user does not exist")
         return posts.filter { it.user!!.id == userId}.toMutableSet()
     }
 
@@ -89,13 +89,6 @@ class CryptoExchangeSystem {
         function(value, property)
     }
 
-    fun wireTransferNotice(postId: Long, interestedUserId: Long?) {
-        val interestedUser = getUserById(interestedUserId!!)
-        val post = posts.find { it.id == postId }
-        posts.remove(post)
-        post!!.status = StatusPost.IN_PROGRESS
-    }
-
     private val checkForPattern: (pattern: Regex, errorMessage: String) -> (value: String, property: String) -> Unit = {
         pattern, errorMessage -> { value, property ->
             run {
@@ -112,5 +105,12 @@ class CryptoExchangeSystem {
                 if(value.length !in min..max) throw UserCannotBeRegisteredException("The $property is too short or too long")
             }
         }
+    }
+
+    fun wireTransferNotice(postId: Long, interestedUserId: Long?) {
+        getUserById(interestedUserId!!)
+        val post = posts.find { it.id == postId }
+        posts.remove(post)
+        post!!.status = StatusPost.IN_PROGRESS
     }
 }

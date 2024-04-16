@@ -12,4 +12,6 @@ class Post(var id: Long?, val cryptoCurrency: CryptoCurrency, val amount: Float,
     var user: UserEntity? = null
     var createdDate: LocalDate? = null
     var status: StatusPost? = null
+
+    fun getType(): OperationType = operationType
 }
