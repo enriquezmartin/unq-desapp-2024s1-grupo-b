@@ -49,3 +49,24 @@ jobs:
       # Run tests with Gradle
       - name: Run tests with Gradle
         run: ./gradlew test
+      # Install SonarScanner
+      - name: Install SonarScanner
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y unzip
+          curl -OL https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
+          unzip sonar-scanner-cli-4.6.2.2472-linux.zip
+          export PATH=$PWD/sonar-scanner-4.6.2.2472-linux/bin:$PATH
+
+      # Configure SonarScanner properties
+      - name: Configure SonarScanner
+        run: |
+          echo "sonar.host.url=https://sonarcloud.io" >> sonar-scanner-4.6.2.2472-linux/conf/sonar-scanner.properties
+          echo "sonar.login=${{ secrets.SONAR_TOKEN }}" >> sonar-scanner-4.6.2.2472-linux/conf/sonar-scanner.properties
+          echo "sonar.organization=desapp-grupo-b-2024s1" >> sonar-scanner-4.6.2.2472-linux/conf/sonar-scanner.properties
+          echo "sonar.projectKey=enriquezmartin_unq-desapp-2024s1-grupo-b" >> sonar-scanner-4.6.2.2472-linux/conf/sonar-scanner.properties
+          echo "sonar.projectName=CryptoExchange" >> sonar-scanner-4.6.2.2472-linux/conf/sonar-scanner.properties
+
+      # Run SonarScanner
+      - name: Run SonarScanner
+        run: sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner
