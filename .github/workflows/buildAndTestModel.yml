@@ -62,7 +62,7 @@ jobs:
       - name: Configure SonarScanner
         run: |
           echo "sonar.host.url=https://sonarcloud.io" >> sonar-scanner-5.0.1.3006-linux/conf/sonar-scanner.properties
-          echo "sonar.login=${{ secrets.SONAR_TOKEN }}" >> sonar-scanner-5.0.1.3006-linux/conf/sonar-scanner.properties
+          echo "sonar.token=${{ secrets.SONAR_TOKEN }}" >> sonar-scanner-5.0.1.3006-linux/conf/sonar-scanner.properties
           echo "sonar.organization=desapp-grupo-b-2024s1" >> sonar-scanner-5.0.1.3006-linux/conf/sonar-scanner.properties
           echo "sonar.projectKey=enriquezmartin_unq-desapp-2024s1-grupo-b" >> sonar-scanner-5.0.1.3006-linux/conf/sonar-scanner.properties
           echo "sonar.projectName=CryptoExchange" >> sonar-scanner-5.0.1.3006-linux/conf/sonar-scanner.properties
