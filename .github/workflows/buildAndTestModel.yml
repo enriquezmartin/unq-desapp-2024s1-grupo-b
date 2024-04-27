@@ -67,6 +67,11 @@ jobs:
           echo "sonar.projectKey=enriquezmartin_unq-desapp-2024s1-grupo-b" >> sonar-scanner-4.6.2.2472-linux/conf/sonar-scanner.properties
           echo "sonar.projectName=CryptoExchange" >> sonar-scanner-4.6.2.2472-linux/conf/sonar-scanner.properties
 
+      # Configure Java version
+      - name: Set up Java 17 for SonarScanner
+        uses: actions/setup-java@v2
+        with:
+          java-version: 17
       # Run SonarScanner
       - name: Run SonarScanner
         run: sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner
