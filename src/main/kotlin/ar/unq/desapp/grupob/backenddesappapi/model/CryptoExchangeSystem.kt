@@ -1,6 +1,6 @@
 package ar.unq.desapp.grupob.backenddesappapi.model
 
-import ar.unq.desapp.grupob.backenddesappapi.DTO.IntentItem
+import ar.unq.desapp.grupob.backenddesappapi.dto.IntentItem
 import ar.unq.desapp.grupob.backenddesappapi.utlis.UserCannotBeRegisteredException
 import ar.unq.desapp.grupob.backenddesappapi.utlis.UserNotRegisteredException
 import java.time.LocalDate

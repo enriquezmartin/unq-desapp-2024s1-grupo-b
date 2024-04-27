@@ -1,6 +1,6 @@
 package ar.unq.desapp.grupob.backenddesappapi.model
 
-import ar.unq.desapp.grupob.backenddesappapi.DTO.IntentItem
+import ar.unq.desapp.grupob.backenddesappapi.dto.IntentItem
 import ar.unq.desapp.grupob.backenddesappapi.helpers.UserBuilder
 import ar.unq.desapp.grupob.backenddesappapi.utlis.UserCannotBeRegisteredException
 import ar.unq.desapp.grupob.backenddesappapi.utlis.UserNotRegisteredException
@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.time.LocalDate
-import java.util.*
 
 class CryptoExchangeSystemTest {
 

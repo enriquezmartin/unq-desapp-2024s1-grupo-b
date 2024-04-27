@@ -1,4 +1,4 @@
-package ar.unq.desapp.grupob.backenddesappapi.DTO
+package ar.unq.desapp.grupob.backenddesappapi.dto
 
 import ar.unq.desapp.grupob.backenddesappapi.model.CryptoCurrency
 import ar.unq.desapp.grupob.backenddesappapi.model.OperationType
