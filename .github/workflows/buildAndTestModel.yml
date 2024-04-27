@@ -75,4 +75,6 @@ jobs:
           java-version: '17'
       # Run SonarScanner
       - name: Run SonarScanner
-        run: sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner
+        run: |
+          sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner \
+            -Dsonar.coverage.jacoco.xmlReportPaths=build/jacocoReportDir/testjacocoTestReport.xml
