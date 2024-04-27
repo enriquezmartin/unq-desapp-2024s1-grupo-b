@@ -41,7 +41,7 @@ class SecurityConfig {
         jwtAuthenticationFilter.setFilterProcessesUrl("/login")
         return httpSecurity
             .csrf { it.disable() }
-            .authorizeHttpRequests {  it.requestMatchers("/register").permitAll() }
+            .authorizeHttpRequests {  it.requestMatchers("/register", "/swagger-ui/**", "/api-docs/**").permitAll() }
             .authorizeHttpRequests { it.anyRequest().authenticated() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .addFilter(jwtAuthenticationFilter)

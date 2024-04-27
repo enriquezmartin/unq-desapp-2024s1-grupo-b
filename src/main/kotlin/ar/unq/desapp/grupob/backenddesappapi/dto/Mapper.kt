@@ -13,7 +13,7 @@ class Mapper {
     lateinit var encoder: PasswordEncoder
 
     fun fromRegisterDTOtoUser(dto: RegisterDTO): UserEntity{
-        val user = UserEntity()
+        var user: UserEntity = UserEntity(null, null, null, null, null, null, null, null, null)
         user.username = dto.username
         user.password = encoder.encode(dto.password)
         return user

@@ -42,8 +42,8 @@ class AuthController {
     @PostMapping("/register")
     fun register(@RequestBody userDTO: RegisterDTO): String{
         try {
-            val user = mapper.fromRegisterDTOtoUser(userDTO)
-            val token = jwtUtils.generateAccessToken(user.username)
+            var user = mapper.fromRegisterDTOtoUser(userDTO)
+            var token = jwtUtils.generateAccessToken(user.username!!)
             userDao.save(user)
             return token
         } catch (e: Exception){ return "Failed: ${e.message} "}
