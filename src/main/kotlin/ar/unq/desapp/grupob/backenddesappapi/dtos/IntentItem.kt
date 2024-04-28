@@ -1,8 +1,7 @@
-package ar.unq.desapp.grupob.backenddesappapi.DTO
+package ar.unq.desapp.grupob.backenddesappapi.dtos
 
 import ar.unq.desapp.grupob.backenddesappapi.model.CryptoCurrency
 import ar.unq.desapp.grupob.backenddesappapi.model.OperationType
-import org.springframework.data.annotation.CreatedDate
 import java.time.LocalDate
 
 data class IntentItem(

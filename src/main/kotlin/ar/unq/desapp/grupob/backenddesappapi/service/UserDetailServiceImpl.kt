@@ -18,10 +18,11 @@ class UserDetailServiceimpl : UserDetailsService{
     lateinit var userDao: UserRepository
 
     override fun loadUserByUsername(username: String?): UserDetails {
-        var userdetails: UserEntity = userDao.findByUsername(username!!).orElseThrow {
+        var userdetails: UserEntity = userDao.findByEmail(username!!).orElseThrow {
             throw UsernameNotFoundException("El usuario no existe")
         }
-        var authorities: Set<GrantedAuthority> = userdetails.profile.map { SimpleGrantedAuthority("ROLE_${it.name}") }.toSet()
-        return User(userdetails.username, userdetails.password, true, true, true, true, authorities)
+        println("user: ${userdetails.email}")
+        var authorities: Set<GrantedAuthority> = listOf(SimpleGrantedAuthority("ROLE_USER") ).toSet()
+        return User(userdetails.email, userdetails.password, true, true, true, true, authorities)
     }
 }

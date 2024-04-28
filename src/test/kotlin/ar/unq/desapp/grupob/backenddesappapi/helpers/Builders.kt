@@ -15,7 +15,8 @@ class UserBuilder(){
     private var walletAddress: String? = null
 
     fun build(): UserEntity{
-        val user: UserEntity = UserEntity(id, username, password, name, surname, email, address, cvuMP, walletAddress)
+        val user: UserEntity = UserEntity(email, password, name, surname, address, cvuMP, walletAddress)
+        user.id = this.id
         return user
     }
 

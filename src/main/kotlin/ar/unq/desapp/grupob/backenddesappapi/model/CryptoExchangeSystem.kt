@@ -1,8 +1,8 @@
 package ar.unq.desapp.grupob.backenddesappapi.model
 
-import ar.unq.desapp.grupob.backenddesappapi.DTO.IntentItem
-import ar.unq.desapp.grupob.backenddesappapi.utlis.UserCannotBeRegisteredException
-import ar.unq.desapp.grupob.backenddesappapi.utlis.UserNotRegisteredException
+import ar.unq.desapp.grupob.backenddesappapi.dtos.IntentItem
+import ar.unq.desapp.grupob.backenddesappapi.utils.UserCannotBeRegisteredException
+import ar.unq.desapp.grupob.backenddesappapi.utils.UserNotRegisteredException
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
@@ -77,7 +77,6 @@ class CryptoExchangeSystem {
 
         checkNullAndApply(user.name, UserEntity::name.name, checkForRange(3, 30))
         checkNullAndApply(user.surname, UserEntity::surname.name, checkForRange(3, 30))
-        checkNullAndApply(user.email, UserEntity::email.name, checkForPattern(emailPattern, "does not have a valid format"))
         checkNullAndApply(user.address, UserEntity::address.name, checkForRange(10, 30))
         checkNullAndApply(user.password, UserEntity::password.name, checkForPattern(passwordPattern, "is too weak"))
         checkNullAndApply(user.cvu, UserEntity::cvu.name, checkForPattern(cvuPattern, "must have 22 digits"))
