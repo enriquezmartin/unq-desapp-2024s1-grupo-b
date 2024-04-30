@@ -57,14 +57,14 @@ class CryptoExchangeSystem {
         pricesForCryptoCurrency.add(price)
         prices[cryptoCurrency] = pricesForCryptoCurrency
     }
-    fun getPricesForTheLast24hs(cryptoCurrency: CryptoCurrency): List<Price> {
+/*    fun getPricesForTheLast24hs(cryptoCurrency: CryptoCurrency): List<Price> {
         val now = LocalDate.now()
         val minus24hs = now.minus(1, ChronoUnit.DAYS)
         return getPricesFor(cryptoCurrency).filter {
-            (it.priceTime.isAfter(minus24hs) || it.priceTime.isEqual(minus24hs)) && (it.priceTime.isBefore(now) || it.priceTime.isEqual(now))
+            (it.priceTime!!.isAfter(minus24hs) || it.priceTime!!.isEqual(minus24hs)) && (it.priceTime!!.isBefore(now) || it.priceTime!!.isEqual(now))
         }
     }
-
+*/
     fun getUserById(id: Long): UserEntity? {
         return users.find {it.id == id}
     }
