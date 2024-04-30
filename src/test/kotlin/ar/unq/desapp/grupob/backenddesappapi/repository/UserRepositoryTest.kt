@@ -1,6 +1,8 @@
 package ar.unq.desapp.grupob.backenddesappapi.repository
 
+import ar.unq.desapp.grupob.backenddesappapi.helpers.UserBuilder
 import ar.unq.desapp.grupob.backenddesappapi.model.UserEntity
+import jakarta.transaction.Transactional
 import jakarta.validation.ConstraintViolationException
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -20,14 +22,49 @@ class UserRepositoryTest {
     @Autowired
     lateinit var userDao: UserRepository
 
-//    var user1: UserEntity = UserEntity("username","password")
-//    var user2: UserEntity = UserEntity("username","password")
-//
-//    @Test()
-//    fun `when two users with the same username are saved, an exception is raised`(){
-//        assertThrows<DataIntegrityViolationException> {
-//            user1 = userDao.save(user1)
-//            user2 = userDao.save(user2)
-//        }
-//    }
+    var validUser = UserBuilder()
+        .withName("a valid name")
+        .withSurname("a valid surname")
+        .withEmail("valid@asd.com")
+        .withAddress("a valid address")
+        .withPassword("Pass*Word")
+        .withCvuMP("1234567890123456789012")
+        .withWalletAddress("12345678")
+        .build()
+
+    @Test
+    fun `when two users with the same email are saved, an exception is raised`(){
+        val userWithAlreadyTakenEmail = UserBuilder()
+            .withName("another valid name")
+            .withSurname("another valid surname")
+            .withEmail("valid@asd.com")
+            .withAddress("another valid address")
+            .withPassword("aPass*Word")
+            .withCvuMP("1234567890123456789012")
+            .withWalletAddress("12345678")
+            .build()
+
+        assertThrows<DataIntegrityViolationException> {
+            userDao.save(validUser)
+            userDao.save(userWithAlreadyTakenEmail)
+        }
+    }
+
+    @Test
+    fun `when two users with the same wallet address are saved, an exception is raised`(){
+        val userWithAlreadyTakenWalletAddress = UserBuilder()
+            .withName("another valid name")
+            .withSurname("another valid surname")
+            .withEmail("anotherValid@email.com")
+            .withAddress("another valid address")
+            .withPassword("aPass*Word")
+            .withCvuMP("1234567890123456789012")
+            .withWalletAddress("12345678")
+            .build()
+
+        assertThrows<DataIntegrityViolationException> {
+            userDao.save(validUser)
+            userDao.save(userWithAlreadyTakenWalletAddress)
+        }
+    }
 }
