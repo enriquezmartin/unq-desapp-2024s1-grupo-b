@@ -19,4 +19,10 @@ class Price(){
         this.value = value
         this.priceTime = LocalDate.now()
     }
+
+    constructor(cryptoCurrency: CryptoCurrency, value: Float, priceTime: LocalDate): this(){
+        this.cryptoCurrency = cryptoCurrency
+        this.value = value
+        this.priceTime = priceTime
+    }
 }

@@ -1,6 +1,5 @@
 package ar.unq.desapp.grupob.backenddesappapi.service
 
-import org.junit.jupiter.api.*
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
