@@ -28,8 +28,9 @@ class SecurityConfig {
         return httpSecurity
             .csrf { it.disable() }
             .authorizeHttpRequests {
-                it.requestMatchers("/login/**", "/register/**").permitAll() }
-            .authorizeHttpRequests { it.anyRequest().authenticated() }
+
+            it.requestMatchers("/login/**", "/register/**", "/swagger-ui/**", "/api-docs/**").permitAll() }
+                .authorizeHttpRequests { it.anyRequest().authenticated() }
 //            .authorizeHttpRequests { conf ->
 //                conf.requestMatchers("admin/**").hasAuthority("ADMIN")
 //                conf.requestMatchers("/login/**", "/register/**").permitAll()

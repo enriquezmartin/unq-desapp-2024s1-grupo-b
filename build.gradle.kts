@@ -47,9 +47,9 @@ dependencies {
 	implementation("javax.validation:validation-api:2.0.1.Final")
 
 	// Swagger dependencies.
-	implementation("org.springdoc:springdoc-openapi-data-rest:1.6.0")
-	implementation("org.springdoc:springdoc-openapi-ui:1.6.0")
-	implementation("org.springdoc:springdoc-openapi-kotlin:1.6.0")
+	//implementation("org.springdoc:springdoc-openapi-data-rest:1.6.0")
+	//implementation("org.springdoc:springdoc-openapi-ui:1.6.0")
+	//implementation("org.springdoc:springdoc-openapi-kotlin:1.6.0")
 }
 jacoco {
 	toolVersion = "0.8.11"
