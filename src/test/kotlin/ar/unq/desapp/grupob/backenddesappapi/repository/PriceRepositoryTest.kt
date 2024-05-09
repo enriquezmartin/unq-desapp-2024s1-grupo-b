@@ -1,7 +1,9 @@
 package ar.unq.desapp.grupob.backenddesappapi.repository
 
+import ar.unq.desapp.grupob.backenddesappapi.helpers.DataSpringService
 import ar.unq.desapp.grupob.backenddesappapi.model.CryptoCurrency
 import ar.unq.desapp.grupob.backenddesappapi.model.Price
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -15,6 +17,14 @@ import java.time.LocalDate
 class PriceRepositoryTest {
     @Autowired
     lateinit var priceRepository : PriceRepository
+    @Autowired
+    lateinit var dataService: DataSpringService
+
+    @AfterEach
+    fun clean() {
+        priceRepository.deleteAll()
+        //dataService.cleanUp()
+    }
 
     @Test
     fun `try to get pricing of an nonexistent crypto active returns empty`(){
@@ -56,20 +66,4 @@ class PriceRepositoryTest {
         assertEquals(testPrice.id, result.id)
     }
 
-/*  necesitamos esto porque despues de cada test debe limpiar la base, o algunos test fallarán
-    falta crear un JDBCTemplate
-    fun cleanup(){
-        //1° Traer todas las tablas
-        val tables = jdbcTemplate.queryForList("SHOW TABLES")
-        val tableNames = tables.map { it.values.first() as String }
-        //2° Desactivar el chequeo por FK
-        jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 0")
-        //3° Vaciar todas las tablas
-        tableNames.forEach{tableName ->
-            jdbcTemplate.execute("TRUNCATE TABLE $tableName")
-        }
-        //4° Activar el chequeo por FK
-        jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 1")
-    }
-*/
 }
