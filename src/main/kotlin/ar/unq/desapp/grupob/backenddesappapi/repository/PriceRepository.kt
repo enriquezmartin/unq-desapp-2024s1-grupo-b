@@ -11,4 +11,6 @@ import java.time.LocalDate
 interface PriceRepository : JpaRepository<Price, Long>  {
     fun findByCryptoCurrency(crypto: CryptoCurrency) : List<Price>
     fun findByCryptoCurrencyAndPriceTimeAfter(cryptoCurrency: CryptoCurrency, priceTimeAfter: LocalDate? = LocalDate.now().minusDays(1)) : List<Price>
+    fun findFirstByCryptoCurrencyOrderByPriceTimeDesc(crypto: CryptoCurrency): Price
+
 }

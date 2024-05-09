@@ -46,9 +46,16 @@ class PriceRepositoryTest {
     }
 
     @Test
-    fun `test re piola`(){
+    fun `get last price`(){
+        val testPrice = Price(CryptoCurrency.AAVEUSDT,2.5F)
+        val oldPrice = Price(CryptoCurrency.AAVEUSDT,2.4F, LocalDate.now().minusDays(2))
+        priceRepository.save(testPrice)
+        priceRepository.save(oldPrice)
+        val result = priceRepository.findFirstByCryptoCurrencyOrderByPriceTimeDesc(CryptoCurrency.AAVEUSDT)
 
+        assertEquals(testPrice.id, result.id)
     }
+
 /*  necesitamos esto porque despues de cada test debe limpiar la base, o algunos test fallarán
     falta crear un JDBCTemplate
     fun cleanup(){

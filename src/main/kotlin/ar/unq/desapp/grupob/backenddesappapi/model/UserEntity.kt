@@ -25,6 +25,9 @@ class UserEntity(){
     var operations: Int = 0
     var points: Int = 0
 
+    @OneToMany(mappedBy = "user", cascade = arrayOf(CascadeType.ALL), orphanRemoval = true)
+    val intents: MutableList<Post> = mutableListOf()
+
     constructor(email: String?, password: String?, name: String?, surname: String?, address: String?, cvu: String?,walletAddress: String?): this(){
         val rangeErrorMsg:(property: String) -> String = { property -> "The $property is too short or too long" }
         val emailPattern = Regex("^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})")
@@ -39,15 +42,11 @@ class UserEntity(){
         this.password =UserValidator.validatePattern(password, passwordPattern, "The password is too weak")
         this.cvu =UserValidator.validatePattern(cvu, cvuPattern, "The cvu must have 22 digits")
         this.walletAddress =UserValidator.validatePattern(walletAddress, walletAddressPattern, "The wallet address must have 8 digits")
-
-
     }
 
-
-//    @ManyToMany(fetch = FetchType.EAGER, targetEntity = RoleEntity :: class, cascade = arrayOf(CascadeType.PERSIST))
-//    @JoinTable(name = "user_profile",
-//        joinColumns = [JoinColumn(name = "user_id")],
-//        inverseJoinColumns = [JoinColumn(name = "profile_id")])
-//    var profile: Set<Profile> = HashSet()
+    fun addPost(post: Post) {
+        intents.add(post)
+        post.user = this
+    }
 
 }
