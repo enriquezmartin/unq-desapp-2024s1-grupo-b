@@ -1,8 +1,6 @@
 package ar.unq.desapp.grupob.backenddesappapi.model
 
 import jakarta.persistence.*
-import jdk.jfr.DataAmount
-import org.springframework.http.HttpStatus
 import java.time.LocalDate
 
 @Entity
@@ -14,15 +12,13 @@ class Post(){
     var amount: Float?= null
     var price: Float?= null
     var operationType: OperationType?= null
-    //@ManyToOne
-    //var user: UserEntity? = null
     var createdDate: LocalDate? = null
-    var status: StatusPost? = null
+    var status: PostStatus? = null
     constructor(cryptoCurrency: CryptoCurrency,
                 amount: Float,
                 price: Float,
                 operationType: OperationType,
-                status: StatusPost = StatusPost.ACTIVE) : this(){
+                status: PostStatus = PostStatus.ACTIVE) : this(){
         this.cryptoCurrency = cryptoCurrency
         this.amount = amount
         this.price = price
@@ -32,6 +28,7 @@ class Post(){
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    var user: UserEntity? = null
+    @JoinColumn(name = "owner_id")
+    var owner: UserEntity? = null
+
 }

@@ -25,8 +25,11 @@ class UserEntity(){
     var operations: Int = 0
     var points: Int = 0
 
-    @OneToMany(mappedBy = "user", cascade = arrayOf(CascadeType.ALL), orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", cascade = [CascadeType.MERGE], orphanRemoval = true)
     val intents: MutableList<Post> = mutableListOf()
+
+    @OneToMany(mappedBy = "client", cascade = [CascadeType.MERGE])
+    val operation: MutableList<CryptoOperation> = mutableListOf()
 
     constructor(email: String?, password: String?, name: String?, surname: String?, address: String?, cvu: String?,walletAddress: String?): this(){
         val rangeErrorMsg:(property: String) -> String = { property -> "The $property is too short or too long" }
@@ -46,7 +49,7 @@ class UserEntity(){
 
     fun addPost(post: Post) {
         intents.add(post)
-        post.user = this
+        post.owner = this
     }
 
 }

@@ -9,12 +9,10 @@ import ar.unq.desapp.grupob.backenddesappapi.repository.PriceRepository
 import ar.unq.desapp.grupob.backenddesappapi.repository.UserRepository
 import ar.unq.desapp.grupob.backenddesappapi.utils.PriceOutOfRangeException
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.Mock
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
@@ -83,14 +81,14 @@ class PostServiceTest {
         )
 
         val savedPost: Post = service.intentPost(post, user.id!!)
-        assertEquals(post.user!!.id!!, user.id!!)
+        assertEquals(post.owner!!.id!!, user.id!!)
         //assertTrue(savedPost.id!! != null)
     }
 
     @Test
     fun `active posts are retrieved by its status`(){
         service.getActivePost()
-        verify(postRepository).findByStatus(StatusPost.ACTIVE)
+        verify(postRepository).findByStatus(PostStatus.ACTIVE)
     }
 
 

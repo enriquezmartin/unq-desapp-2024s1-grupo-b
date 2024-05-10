@@ -1,4 +1,4 @@
-package ar.unq.desapp.grupob.backenddesappapi.service
+package ar.unq.desapp.grupob.backenddesappapi.service.impl
 
 import ar.unq.desapp.grupob.backenddesappapi.model.UserEntity
 import ar.unq.desapp.grupob.backenddesappapi.repository.UserRepository

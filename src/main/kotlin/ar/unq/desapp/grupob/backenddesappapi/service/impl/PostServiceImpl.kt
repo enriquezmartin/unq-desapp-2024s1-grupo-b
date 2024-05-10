@@ -1,7 +1,6 @@
 package ar.unq.desapp.grupob.backenddesappapi.service.impl
 
-import ar.unq.desapp.grupob.backenddesappapi.model.Post
-import ar.unq.desapp.grupob.backenddesappapi.model.StatusPost
+import ar.unq.desapp.grupob.backenddesappapi.model.*
 import ar.unq.desapp.grupob.backenddesappapi.repository.PostRepository
 import ar.unq.desapp.grupob.backenddesappapi.repository.PriceRepository
 import ar.unq.desapp.grupob.backenddesappapi.repository.UserRepository
@@ -36,7 +35,7 @@ class PostServiceImpl: PostService {
             val user = userRepository.findById(id).getOrElse {
                 throw UsernameNotFoundException("The user with id $id was not found")
             }
-            post.status = StatusPost.ACTIVE
+            post.status = PostStatus.ACTIVE
             user.addPost(post)
             userRepository.save(user)
             return post
@@ -44,7 +43,8 @@ class PostServiceImpl: PostService {
     }
 
     override fun getActivePost(): List<Post> {
-        return postRepository.findByStatus(StatusPost.ACTIVE)
+        return postRepository.findByStatus(PostStatus.ACTIVE)
     }
+
 
 }
