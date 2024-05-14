@@ -1,4 +1,4 @@
-package ar.unq.desapp.grupob.backenddesappapi.binance
+package ar.unq.desapp.grupob.backenddesappapi.thirdApiService.binance
 
 import ar.unq.desapp.grupob.backenddesappapi.model.CryptoCurrency
 import org.springframework.beans.factory.annotation.Autowired
@@ -8,15 +8,17 @@ import org.springframework.web.client.RestTemplate
 @Service
 class BinanceApiService() {
 
+    private val baseUrl = "https://api1.binance.com/api/v3/ticker/price"
+
     @Autowired
     lateinit var restTemplate: RestTemplate
 
     fun getPrices(symbols: List<String>): List<BinancePriceResponse> {
-        val baseUrl = "https://api1.binance.com/api/v3/ticker/price"
-        val url = "$baseUrl?symbols=${symbols.joinToString(",")}"
-
+        val formattedSymbols = symbols.joinToString(",") { "\"$it\"" }
+        val url = "$baseUrl?symbols=[$formattedSymbols]"
+        println(url)
         val response = restTemplate.getForObject(url, Array<BinancePriceResponse>::class.java)
-
+        println(response)
         return response?.toList() ?: emptyList()
     }
 

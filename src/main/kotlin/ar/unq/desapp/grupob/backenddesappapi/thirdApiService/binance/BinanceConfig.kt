@@ -1,4 +1,4 @@
-package ar.unq.desapp.grupob.backenddesappapi.binance
+package ar.unq.desapp.grupob.backenddesappapi.thirdApiService.binance
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
