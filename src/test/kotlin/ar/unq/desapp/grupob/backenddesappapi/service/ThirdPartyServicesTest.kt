@@ -2,20 +2,24 @@ package ar.unq.desapp.grupob.backenddesappapi.service
 
 import ar.unq.desapp.grupob.backenddesappapi.thirdApiService.binance.BinanceApiService
 import ar.unq.desapp.grupob.backenddesappapi.thirdApiService.binance.BinancePriceResponse
+import ar.unq.desapp.grupob.backenddesappapi.thirdApiService.dolarApi.DolarApiService
+import ar.unq.desapp.grupob.backenddesappapi.thirdApiService.dolarApi.DolarPriceResponse
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.web.client.RestTemplate
 
 @SpringBootTest
-class BinanceApiServiceTest {
+class ThirdPartyServicesTest {
 
     @Autowired
     lateinit var binanceApiService: BinanceApiService
+
+    @Autowired
+    lateinit var dolarApiService: DolarApiService
 
     @MockBean
     lateinit var restTemplateMock: RestTemplate
@@ -49,5 +53,21 @@ class BinanceApiServiceTest {
         assertEquals("10.00", prices[0].price)
         assertEquals("ETHBTC", prices[1].symbol)
         assertEquals("3000.00", prices[1].price)
+    }
+
+    @Test
+    fun testGetDolarCryptoPrice() {
+        val mockResponse = DolarPriceResponse(
+           "USD","cripto","Cripto","1078", "1095", "2024-05-15T20:57:00.000Z"
+        )
+        `when`(restTemplateMock.getForObject("https://dolarapi.com/v1/dolares/cripto", DolarPriceResponse::class.java))
+            .thenReturn(mockResponse)
+        val responsePrice = dolarApiService.getDolarCryptoPrice()!!
+        assertEquals("USD" , responsePrice.moneda)
+        assertEquals("cripto",responsePrice.casa)
+        assertEquals("Cripto",responsePrice.nombre)
+        assertEquals("1078",responsePrice.compra)
+        assertEquals("1095",responsePrice.venta)
+        assertEquals("2024-05-15T20:57:00.000Z",responsePrice.fechaActualizacion)
     }
 }
