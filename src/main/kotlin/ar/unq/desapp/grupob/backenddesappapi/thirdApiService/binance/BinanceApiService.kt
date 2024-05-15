@@ -13,18 +13,21 @@ class BinanceApiService() {
     @Autowired
     lateinit var restTemplate: RestTemplate
 
+    fun getPriceForCrypto(symbol: String) : BinancePriceResponse?{
+        val url = "$baseUrl?symbol=$symbol"
+        val response= restTemplate.getForObject(url, BinancePriceResponse::class.java)
+        return response
+    }
+
     fun getPrices(symbols: List<String>): List<BinancePriceResponse> {
         val formattedSymbols = symbols.joinToString(",") { "\"$it\"" }
         val url = "$baseUrl?symbols=[$formattedSymbols]"
-        println(url)
         val response = restTemplate.getForObject(url, Array<BinancePriceResponse>::class.java)
-        println(response)
         return response?.toList() ?: emptyList()
     }
 
     fun getAllPrices(): List<BinancePriceResponse>{
         val symbolList = CryptoCurrency.entries.map{it.name}
-
         return getPrices(symbolList)
     }
 }
