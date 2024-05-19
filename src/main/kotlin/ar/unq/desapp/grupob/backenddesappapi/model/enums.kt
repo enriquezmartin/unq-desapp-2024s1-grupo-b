@@ -4,7 +4,7 @@ enum class CryptoCurrency {
     ALICEUSDT, MATICUSDT, AXSUSDT, AAVEUSDT,
     ATOMUSDT, NEOUSDT, DOTUSDT, ETHUSDT,
     CAKEUSDT, BTCUSDT, BNBUSDT, ADAUSDT,
-    TRXUSDT, AUDIOUSDT
+    TRXUSDT, AUDIOUSDT, USDAR //Como le pongo al dolar cripto?
 }
 enum class OperationType {
     PURCHASE, SALE

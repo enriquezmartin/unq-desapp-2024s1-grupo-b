@@ -7,5 +7,4 @@ data class DolarPriceResponse(
     val compra: String,
     val venta: String,
     val fechaActualizacion: String
-) {
-}
+)

@@ -29,6 +29,9 @@ class PriceServiceImpl : PriceService{
         val prices = binancePrices.map {
             Price(CryptoCurrency.valueOf(it.symbol), it.price.toFloat())
         }
+        val dolarApiResp = dolarApiService.getDolarCryptoPrice()
+        val dolarPrice = Price(CryptoCurrency.USDAR, dolarApiResp!!.venta.toFloat())
+        prices.toMutableList().add(dolarPrice)
         priceRepository.saveAll(prices)
     }
 
