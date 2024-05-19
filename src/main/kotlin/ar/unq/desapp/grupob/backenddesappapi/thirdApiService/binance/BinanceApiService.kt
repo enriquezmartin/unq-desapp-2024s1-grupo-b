@@ -41,21 +41,6 @@ class BinanceApiService() {
 
     fun getAllPrices(): List<BinancePriceResponse>{
         val symbolList = CryptoCurrency.entries.map{it.name}
-        return getPrices(symbolList)
+        return getPrices(symbolList.filterNot{it=="USDAR"})
     }
 }
-/*como hacer la actualizacion cada 10 min tentantivo
-
-agregar @EnableScheduling a la clase de BackendDesappApiApplication
-
-@Component
-class PriceUpdater(private val binanceApiService: BinanceApiService) {
-
-    @Scheduled(fixedRate = 600000) // Actualizar cada 10 minutos (en milisegundos)
-    fun updatePrices() {
-        val prices = getAllPrices()
-
-        // persistir los valores
-    }
-}
- */

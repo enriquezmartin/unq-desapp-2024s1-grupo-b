@@ -29,7 +29,7 @@ class SecurityConfig {
             .csrf { it.disable() }
             .authorizeHttpRequests {
 
-            it.requestMatchers("/login/**", "/register/**", "/swagger-ui/**", "/api-docs/**", "/binance/**").permitAll() }
+            it.requestMatchers("/login/**", "/register/**", "/swagger-ui/**", "/api-docs/**", "/binance/**","/dolarapi/**").permitAll() }
                 .authorizeHttpRequests { it.anyRequest().authenticated() }
 //            .authorizeHttpRequests { conf ->
 //                conf.requestMatchers("admin/**").hasAuthority("ADMIN")

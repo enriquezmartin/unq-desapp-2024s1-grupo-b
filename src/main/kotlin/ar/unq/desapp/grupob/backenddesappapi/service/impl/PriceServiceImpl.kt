@@ -9,6 +9,7 @@ import ar.unq.desapp.grupob.backenddesappapi.thirdApiService.dolarApi.DolarApiSe
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.LocalDate
 
 @Transactional
 @Service
@@ -26,12 +27,30 @@ class PriceServiceImpl : PriceService{
     lateinit var dolarApiService: DolarApiService
     override fun updatePrices() {
         val binancePrices = binanceApiService.getAllPrices()
-        val prices = binancePrices.map {
-            Price(CryptoCurrency.valueOf(it.symbol), it.price.toFloat())
-        }
         val dolarApiResp = dolarApiService.getDolarCryptoPrice()
-        val dolarPrice = Price(CryptoCurrency.USDAR, dolarApiResp!!.venta.toFloat())
-        prices.toMutableList().add(dolarPrice)
+
+        // Obtener todos los precios existentes
+        val existingPrices = priceRepository.findAll().associateBy { it.cryptoCurrency }
+
+        // Crear una lista mutable para los precios actualizados o nuevos
+        val prices = binancePrices.map {
+            val cryptoCurrency = CryptoCurrency.valueOf(it.symbol)
+            val price = existingPrices[cryptoCurrency]?.apply {
+                this.value = it.price.toFloat()
+                this.priceTime = LocalDate.now()
+            } ?: Price(cryptoCurrency, it.price.toFloat())
+            price
+        }.toMutableList()
+
+        // Manejar el precio del dólar
+        val dolarPrice = existingPrices[CryptoCurrency.USDAR]?.apply {
+            this.value = dolarApiResp!!.venta.toFloat()
+            this.priceTime = LocalDate.now()
+        } ?: Price(CryptoCurrency.USDAR, dolarApiResp!!.venta.toFloat())
+
+        prices.add(dolarPrice)
+
+        // Guardar todos los precios actualizados o nuevos
         priceRepository.saveAll(prices)
     }
 
