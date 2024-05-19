@@ -13,7 +13,7 @@ class PriceAutoUpdater {
 
     private val logger = LoggerFactory.getLogger(PriceAutoUpdater::class.java)
 
-    @Scheduled(fixedRate = 45000) // Actualizar cada 10 minutos (en milisegundos)
+    @Scheduled(fixedRate = 600000) // Actualizar cada 10 minutos (en milisegundos)
     fun updatePrices() {
         logger.info("Updating prices...")
         priceService.updatePrices()
