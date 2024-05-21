@@ -25,10 +25,10 @@ class PostServiceImpl: PostService {
 
     @Autowired
     lateinit var userRepository: UserRepository
-    override fun intentPost(post: Post, id: Long): Post {
-        var lastPrice = priceRepository.findFirstByCryptoCurrencyOrderByPriceTimeDesc(post.cryptoCurrency!!)
-        var priceIsExceeded = post.price!! > lastPrice.value!! * 1.05F
-        var priceFallShort = post.price!! < lastPrice.value!! * 0.95F
+    override fun intentPost(aPost: Post, id: Long): Post {
+        var lastPrice = priceRepository.findFirstByCryptoCurrencyOrderByPriceTimeDesc(aPost.cryptoCurrency!!)
+        var priceIsExceeded = aPost.price!! > lastPrice.value!! * 1.05F
+        var priceFallShort = aPost.price!! < lastPrice.value!! * 0.95F
         if(priceIsExceeded || priceFallShort){
             throw PriceOutOfRangeException()
         }
@@ -36,15 +36,19 @@ class PostServiceImpl: PostService {
             val user = userRepository.findById(id).getOrElse {
                 throw UsernameNotFoundException("The user with id $id was not found")
             }
-            post.status = StatusPost.ACTIVE
-            user.addPost(post)
+            aPost.status = StatusPost.ACTIVE
+            user.addPost(aPost)
             userRepository.save(user)
-            return post
+            return aPost
         }
     }
 
     override fun getActivePost(): List<Post> {
         return postRepository.findByStatus(StatusPost.ACTIVE)
+    }
+
+    override fun saveAllPosts(posts: List<Post>) {
+        postRepository.saveAll(posts)
     }
 
 }
