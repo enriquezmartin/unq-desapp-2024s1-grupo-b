@@ -3,7 +3,9 @@ package ar.unq.desapp.grupob.backenddesappapi.service
 import ar.unq.desapp.grupob.backenddesappapi.dtos.LoginDTO
 import ar.unq.desapp.grupob.backenddesappapi.model.UserEntity
 import ar.unq.desapp.grupob.backenddesappapi.repository.UserRepository
+import ar.unq.desapp.grupob.backenddesappapi.thirdApiService.PriceAutoUpdater
 import jakarta.transaction.Transactional
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -15,6 +17,7 @@ import java.util.*
 @Transactional
 class AuthService {
 
+    private val logger = LoggerFactory.getLogger(PriceAutoUpdater::class.java)
     @Autowired
     lateinit var userRepository: UserRepository
     @Autowired
@@ -27,11 +30,12 @@ class AuthService {
     fun register(user: UserEntity): String {
         user.password = passwordEncoder.encode(user.password)
         userRepository.save(user)
-        println(user.password)
+        //println(user.password)
+        logger.info("User ${user.id} created")
         return jwtService.generateToken(user)
     }
 
-    fun registerAll(users: List<UserEntity>): Unit {
+    fun registerAll(users: List<UserEntity>) {
         users.forEach{ user ->
             user.password = passwordEncoder.encode(user.password)
             userRepository.save(user)
@@ -46,7 +50,7 @@ class AuthService {
             )
         )
         val user: Optional<UserEntity> = userRepository.findByEmail(loginDTO.email)
-        println("login: ${user.get().email}")
+        logger.info("login: ${user.get().email}")
         return jwtService.generateToken(user.get())
     }
 }
