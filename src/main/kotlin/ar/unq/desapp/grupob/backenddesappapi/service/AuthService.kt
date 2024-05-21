@@ -17,7 +17,7 @@ import java.util.*
 @Transactional
 class AuthService {
 
-    private val logger = LoggerFactory.getLogger(PriceAutoUpdater::class.java)
+    private val logger = LoggerFactory.getLogger(AuthService::class.java)
     @Autowired
     lateinit var userRepository: UserRepository
     @Autowired
@@ -31,7 +31,7 @@ class AuthService {
         user.password = passwordEncoder.encode(user.password)
         userRepository.save(user)
         //println(user.password)
-        logger.info("User ${user.id} created")
+        logger.info("User with email: ${user.email} created")
         return jwtService.generateToken(user)
     }
 
@@ -50,7 +50,7 @@ class AuthService {
             )
         )
         val user: Optional<UserEntity> = userRepository.findByEmail(loginDTO.email)
-        logger.info("login: ${user.get().email}")
+        logger.info("Login: ${user.get().email}")
         return jwtService.generateToken(user.get())
     }
 }
