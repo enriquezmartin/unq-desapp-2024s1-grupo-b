@@ -2,6 +2,7 @@ package ar.unq.desapp.grupob.backenddesappapi.dataInit
 
 import ar.unq.desapp.grupob.backenddesappapi.model.UserEntity
 import ar.unq.desapp.grupob.backenddesappapi.repository.UserRepository
+import ar.unq.desapp.grupob.backenddesappapi.service.AuthService
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -9,7 +10,7 @@ import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 
 @Configuration
-class UserDataLoader(private val userRepository: UserRepository) {
+class UserDataLoader(private val authService: AuthService) {
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     //se creara un cmd line runner por cada entidad, y se debe tener en cuenta el orden en que se ejecutan
@@ -63,6 +64,6 @@ class UserDataLoader(private val userRepository: UserRepository) {
             "4567890123456789012345",
             "40404040"
         )
-        userRepository.saveAll(listOf(user0, user1, user2, user3, user4))
+        authService.registerAll(listOf(user0, user1, user2, user3, user4))
     }
 }

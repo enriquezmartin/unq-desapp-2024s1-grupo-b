@@ -31,6 +31,13 @@ class AuthService {
         return jwtService.generateToken(user)
     }
 
+    fun registerAll(users: List<UserEntity>): Unit {
+        users.forEach{ user ->
+            user.password = passwordEncoder.encode(user.password)
+            userRepository.save(user)
+        }
+    }
+
     fun login(loginDTO: LoginDTO): String {
         authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(
