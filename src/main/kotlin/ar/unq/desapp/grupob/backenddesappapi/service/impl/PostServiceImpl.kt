@@ -47,4 +47,8 @@ class PostServiceImpl: PostService {
         return postRepository.findByStatus(StatusPost.ACTIVE)
     }
 
+    override fun saveAllPosts(posts: List<Post>) {
+        postRepository.saveAll(posts)
+    }
+
 }
