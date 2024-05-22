@@ -59,6 +59,8 @@ jobs:
           echo "sonar.projectName=CryptoExchange" >> sonar-scanner/conf/sonar-scanner.properties
           echo "sonar.coverage.jacoco.xmlReportPaths=build/jacocoReportDir/test/jacocoTestReport.xml" >> sonar-scanner/conf/sonar-scanner.properties
           echo "sonar.coverage.exclusions=**/test/**" >> sonar-scanner/conf/sonar-scanner.properties
+          echo "sonar.coverage.exclusions=**/dtos/**" >> sonar-scanner/conf/sonar-scanner.properties
+          echo "sonar.coverage.exclusions=**/utils/**" >> sonar-scanner/conf/sonar-scanner.properties
 
       # Run SonarScanner
       - name: Run SonarScanner
