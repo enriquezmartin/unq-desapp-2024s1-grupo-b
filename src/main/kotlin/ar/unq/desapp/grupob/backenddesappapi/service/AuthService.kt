@@ -4,9 +4,11 @@ import ar.unq.desapp.grupob.backenddesappapi.dtos.LoginDTO
 import ar.unq.desapp.grupob.backenddesappapi.model.UserEntity
 import ar.unq.desapp.grupob.backenddesappapi.repository.UserRepository
 import ar.unq.desapp.grupob.backenddesappapi.thirdApiService.PriceAutoUpdater
+import ar.unq.desapp.grupob.backenddesappapi.utils.UsernameAlreadyTakenException
 import jakarta.transaction.Transactional
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -28,11 +30,17 @@ class AuthService {
     lateinit var authenticationManager: AuthenticationManager
 
     fun register(user: UserEntity): String {
-        user.password = passwordEncoder.encode(user.password)
-        userRepository.save(user)
-        //println(user.password)
-        logger.info("User with email: ${user.email} created")
-        return jwtService.generateToken(user)
+        try{
+            user.password = passwordEncoder.encode(user.password)
+            userRepository.save(user)
+            //println(user.password)
+            logger.info("User with email: ${user.email} created")
+            return jwtService.generateToken(user)
+        }
+        catch (e: DataIntegrityViolationException){
+            throw UsernameAlreadyTakenException("User with username ${user.email} has already been taken")
+        }
+
     }
 
     fun registerAll(users: List<UserEntity>) {
