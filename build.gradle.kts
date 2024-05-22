@@ -20,36 +20,39 @@ repositories {
 	mavenCentral()
 }
 
+val mockitoVersion = "3.10.0"
+val jsonWebTokenVersion = "0.12.5"
+val springBootStarterVersion = "3.2.4"
+val springSecurityVersion = "6.2.3"
+val mySqlVersion = "8.0.33"
+val validationApiVersion = "2.0.1.Final"
+val openapiVersion = "2.3.0"
+
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	runtimeOnly("com.h2database:h2")
-	runtimeOnly("com.mysql:mysql-connector-j")
+	implementation("mysql:mysql-connector-java:${mySqlVersion}")
+	implementation("org.springframework.boot:spring-boot-starter-security:${springBootStarterVersion}")
+	implementation("org.springframework.security:spring-security-core:${springSecurityVersion}")
+	implementation("io.jsonwebtoken:jjwt-api:${jsonWebTokenVersion}")
+	implementation("io.jsonwebtoken:jjwt-root:${jsonWebTokenVersion}")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${openapiVersion}")
+	implementation("javax.validation:validation-api:${validationApiVersion}")
+
+	testImplementation("org.mockito:mockito-core:${mockitoVersion}")
+	testImplementation("org.springframework.security:spring-security-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-	testImplementation("org.mockito:mockito-core:3.10.0")
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
-	implementation("mysql:mysql-connector-java:8.0.33")
+	runtimeOnly("com.h2database:h2")
+	runtimeOnly("com.mysql:mysql-connector-j")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:${jsonWebTokenVersion}")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:${jsonWebTokenVersion}")
 
-	//Authentication
-	implementation("org.springframework.boot:spring-boot-starter-security:3.2.4")
-	implementation("org.springframework.security:spring-security-core:6.2.3")
-	testImplementation("org.springframework.security:spring-security-test")
-	implementation("io.jsonwebtoken:jjwt-api:0.12.5")
-	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.5")
-	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.5")
-	implementation("io.jsonwebtoken:jjwt-root:0.12.5")
 
-	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
-	implementation("javax.validation:validation-api:2.0.1.Final")
-
-	// Swagger dependencies.
-	//implementation("org.springdoc:springdoc-openapi-data-rest:1.6.0")
-	//implementation("org.springdoc:springdoc-openapi-ui:1.6.0")
-	//implementation("org.springdoc:springdoc-openapi-kotlin:1.6.0")
 }
 jacoco {
 	toolVersion = "0.8.11"
