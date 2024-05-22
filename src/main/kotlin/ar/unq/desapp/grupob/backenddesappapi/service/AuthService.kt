@@ -33,7 +33,6 @@ class AuthService {
         try{
             user.password = passwordEncoder.encode(user.password)
             userRepository.save(user)
-            //println(user.password)
             logger.info("User with email: ${user.email} created")
             return jwtService.generateToken(user)
         }

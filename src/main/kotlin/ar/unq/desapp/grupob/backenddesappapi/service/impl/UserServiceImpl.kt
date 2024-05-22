@@ -10,9 +10,6 @@ import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
-import java.util.*
-
-fun <T> Optional<T>.toNullable(): T? = orElse(null)
 
 @Service
 class UserServiceImpl : UserService {
@@ -23,16 +20,11 @@ class UserServiceImpl : UserService {
         return userDao.findByEmail(email)
     }
 
-    fun findById(id: Long): UserEntity? {
-        return userDao.findById(id).toNullable()
-    }
-
     override fun loadUserByUsername(username: String?): UserDetails {
-        var userdetails: UserEntity = userDao.findByEmail(username!!)
+        val userdetails: UserEntity = userDao.findByEmail(username!!)
             ?: throw UsernameNotFoundException("El usuario no existe")
 
-        //println("user: ${userdetails.email}")
-        var authorities: Set<GrantedAuthority> = listOf(SimpleGrantedAuthority("ROLE_USER") ).toSet()
+        val authorities: Set<GrantedAuthority> = listOf(SimpleGrantedAuthority("ROLE_USER") ).toSet()
         return User(userdetails.email, userdetails.password, true, true, true, true, authorities)
     }
 }
