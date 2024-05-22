@@ -1,7 +1,6 @@
 package ar.unq.desapp.grupob.backenddesappapi.dtos
 
 import java.time.LocalDate
-import java.util.Date
 
 data class ResponsePostDTO(
     val id: Long,

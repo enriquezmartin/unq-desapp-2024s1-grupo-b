@@ -1,10 +1,9 @@
-package ar.unq.desapp.grupob.backenddesappapi.controller.Advicer
+package ar.unq.desapp.grupob.backenddesappapi.controller.advicer
 
 import ar.unq.desapp.grupob.backenddesappapi.utils.PriceOutOfRangeException
 import ar.unq.desapp.grupob.backenddesappapi.utils.UserCannotBeRegisteredException
 import ar.unq.desapp.grupob.backenddesappapi.utils.UsernameAlreadyTakenException
 import org.slf4j.LoggerFactory
-import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.*
 import org.springframework.http.ResponseEntity
