@@ -40,14 +40,14 @@ class PostBuilder(){
     private var price: Float = 10F
     private var operationType: OperationType = OperationType.SALE
     private var createdDate: LocalDate = LocalDate.now()
-    private var status: StatusPost = StatusPost.ACTIVE
+    private var status: PostStatus = PostStatus.ACTIVE
     private var user: UserEntity? = null
 
     fun build(): Post{
         var post = Post(cryptoCurrency, amount, price, operationType, status)
         post.id = id
         post.createdDate = createdDate
-        post.user = user
+        post.owner = user
         return post
     }
     fun withId(id: Long?): PostBuilder{
@@ -80,7 +80,7 @@ class PostBuilder(){
         return this
     }
 
-    fun withStatus(status: StatusPost): PostBuilder {
+    fun withStatus(status: PostStatus): PostBuilder {
         this.status = status
         return this
     }

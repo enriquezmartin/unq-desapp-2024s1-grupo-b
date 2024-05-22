@@ -9,6 +9,9 @@ enum class CryptoCurrency {
 enum class OperationType {
     PURCHASE, SALE
 }
-enum class StatusPost{
-    ACTIVE, CLOSED, IN_PROGRESS
+enum class PostStatus{
+    ACTIVE, IN_PROGRESS, CLOSED
+}
+enum class OperationStatus{
+    IN_PROGRESS, CANCELLED, CLOSED
 }

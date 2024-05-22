@@ -4,6 +4,7 @@ import ar.unq.desapp.grupob.backenddesappapi.helpers.UserBuilder
 import ar.unq.desapp.grupob.backenddesappapi.model.UserEntity
 import jakarta.transaction.Transactional
 import jakarta.validation.ConstraintViolationException
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
@@ -22,7 +23,14 @@ class UserRepositoryTest {
     @Autowired
     lateinit var userDao: UserRepository
 
+    @AfterEach
+    fun clean() {
+        userDao.deleteAll()
+        //dataService.cleanUp()
+    }
+
     var validUser = UserBuilder()
+        .withId(1L)
         .withName("a valid name")
         .withSurname("a valid surname")
         .withEmail("valid@asd.com")
@@ -35,6 +43,7 @@ class UserRepositoryTest {
     @Test
     fun `when two users with the same email are saved, an exception is raised`(){
         val userWithAlreadyTakenEmail = UserBuilder()
+            .withId(2L)
             .withName("another valid name")
             .withSurname("another valid surname")
             .withEmail("valid@asd.com")
@@ -53,6 +62,7 @@ class UserRepositoryTest {
     @Test
     fun `when two users with the same wallet address are saved, an exception is raised`(){
         val userWithAlreadyTakenWalletAddress = UserBuilder()
+            .withId(2L)
             .withName("another valid name")
             .withSurname("another valid surname")
             .withEmail("anotherValid@email.com")
