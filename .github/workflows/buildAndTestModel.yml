@@ -50,7 +50,6 @@ jobs:
         run: ./gradlew test
 
       # Install SonarScanner
-      # curl -sSLo sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
       - name: Install SonarScanner
         run: |
           sudo apt-get update
