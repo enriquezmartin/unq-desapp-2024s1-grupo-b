@@ -15,6 +15,8 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 
+private const val API_FAIL_MSG = "API is not responding"
+
 @SpringBootTest
 class ThirdPartyServicesTest {
 
@@ -61,9 +63,9 @@ class ThirdPartyServicesTest {
     @Test
     fun testGetPriceForCryptoWhenApiFails() {
         `when`(restTemplateMock.getForObject("https://api1.binance.com/api/v3/ticker/price?symbol=ALICEUSDT", BinancePriceResponse::class.java))
-            .thenThrow(RestClientException("API is not responding"))
+            .thenThrow(RestClientException(API_FAIL_MSG))
         val exception = assertThrows<ApiNotResponding> { binanceApiService.getPriceForCrypto("ALICEUSDT") }
-        assertEquals(exception.message, "API is not responding")
+        assertEquals(exception.message, API_FAIL_MSG)
     }
 
     @Test
@@ -71,12 +73,12 @@ class ThirdPartyServicesTest {
         val symbols = listOf("ALICEUSDT", "ETHBTC")
         //mock simulated non responsive api
         `when`(restTemplateMock.getForObject("https://api1.binance.com/api/v3/ticker/price?symbols=[\"ALICEUSDT\",\"ETHBTC\"]", Array<BinancePriceResponse>::class.java))
-            .thenThrow(RestClientException("API is not responding"))
+            .thenThrow(RestClientException(API_FAIL_MSG))
 
         val exception = assertThrows<ApiNotResponding> {  binanceApiService.getPrices(symbols) }
 
         //assertEquals(emptyList<BinancePriceResponse>(), prices)
-        assertEquals("API is not responding", exception.message)
+        assertEquals(API_FAIL_MSG, exception.message)
     }
 
     @Test

@@ -6,6 +6,16 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
+private const val A_VALID_NAME = "a valid name"
+
+private const val A_VALID_SURNAME = "a valid surname"
+
+private const val A_VALID_EMAIL = "valid@asd.com"
+
+private const val A_VALID_ADDRESS = "a valid address"
+
+private const val A_VALID_PASSWORD = "Pass*Word"
+
 class UserEntityTest {
 
     @Test
@@ -27,7 +37,7 @@ class UserEntityTest {
     @Test
     fun `when an user with invalid surname is created an exception is raised`(){
         var expectedError = "The surname is too short or too long"
-        val builderWithName = UserBuilder().withName("a valid name")
+        val builderWithName = UserBuilder().withName(A_VALID_NAME)
         val excWhenTooShort = assertThrows<UserCannotBeRegisteredException> {
             builderWithName.withSurname("as").build() }.message
         val excWhenTooLong = assertThrows<UserCannotBeRegisteredException> {
@@ -40,7 +50,7 @@ class UserEntityTest {
     @Test
     fun `when an user with invalid email is created an exception is raised`(){
         var expectedError = "The email does not have a valid format"
-        val builderWithNameAndSurname = UserBuilder().withName("a valid name").withSurname("a valid surname")
+        val builderWithNameAndSurname = UserBuilder().withName(A_VALID_NAME).withSurname(A_VALID_SURNAME)
 
         val excWhenNotAt = assertThrows<UserCannotBeRegisteredException> {
             builderWithNameAndSurname.withEmail("email.com").build() }.message
@@ -58,7 +68,7 @@ class UserEntityTest {
     fun `when an user with invalid address is created an exception is raised`(){
         var expectedError = "The address is too short or too long"
         val builderWithNameSurnameAndEmail = UserBuilder()
-            .withName("a valid name").withSurname("a valid surname").withEmail("valid@asd.com")
+            .withName(A_VALID_NAME).withSurname(A_VALID_SURNAME).withEmail(A_VALID_EMAIL)
 
         val excWhenShortAddress = assertThrows<UserCannotBeRegisteredException> {
             builderWithNameSurnameAndEmail.withAddress("short").build()}.message
@@ -73,10 +83,10 @@ class UserEntityTest {
     fun `when an user with invalid or null password is created, an exception is raised`(){
         val expectedError = "The password is too weak"
         val builderWithNameSurnameEmailAndAddress = UserBuilder()
-            .withName("a valid name")
-            .withSurname("a valid surname")
-            .withEmail("valid@asd.com")
-            .withAddress("a valid address")
+            .withName(A_VALID_NAME)
+            .withSurname(A_VALID_SURNAME)
+            .withEmail(A_VALID_EMAIL)
+            .withAddress(A_VALID_ADDRESS)
 
         val excWithNoLowerCase = assertThrows<UserCannotBeRegisteredException> {
             builderWithNameSurnameEmailAndAddress.withPassword("PASS*WORD").build() }.message
@@ -94,11 +104,11 @@ class UserEntityTest {
     fun `when an user with invalid or null cvu is created, an exception is raised`(){
         val expectedError = "The cvu must have 22 digits"
         val builderWithNameSurnameEmailAddressAndPassowrd = UserBuilder()
-            .withName("a valid name")
-            .withSurname("a valid surname")
-            .withEmail("valid@asd.com")
-            .withAddress("a valid address")
-            .withPassword("Pass*Word")
+            .withName(A_VALID_NAME)
+            .withSurname(A_VALID_SURNAME)
+            .withEmail(A_VALID_EMAIL)
+            .withAddress(A_VALID_ADDRESS)
+            .withPassword(A_VALID_PASSWORD)
 
         val excWhenLessThan22 = assertThrows<UserCannotBeRegisteredException> {
             builderWithNameSurnameEmailAddressAndPassowrd.withCvuMP("123").build() }.message
@@ -116,11 +126,11 @@ class UserEntityTest {
     fun `when an user with invalid or null walletAddress is created, an exception is raised`(){
         val expectedError = "The wallet address must have 8 digits"
         val builderWithNameSurnameEmailAddressPasswordAndCvu = UserBuilder()
-            .withName("a valid name")
-            .withSurname("a valid surname")
-            .withEmail("valid@asd.com")
-            .withAddress("a valid address")
-            .withPassword("Pass*Word")
+            .withName(A_VALID_NAME)
+            .withSurname(A_VALID_SURNAME)
+            .withEmail(A_VALID_EMAIL)
+            .withAddress(A_VALID_ADDRESS)
+            .withPassword(A_VALID_PASSWORD)
             .withCvuMP("1234567890123456789012")
 
         val excWhenLessThan8 = assertThrows<UserCannotBeRegisteredException> {
@@ -138,11 +148,11 @@ class UserEntityTest {
     @Test
     fun `when a user with all valid attributes is created, no exception is raised`(){
         val validUser = UserBuilder()
-            .withName("a valid name")
-            .withSurname("a valid surname")
-            .withEmail("valid@asd.com")
-            .withAddress("a valid address")
-            .withPassword("Pass*Word")
+            .withName(A_VALID_NAME)
+            .withSurname(A_VALID_SURNAME)
+            .withEmail(A_VALID_EMAIL)
+            .withAddress(A_VALID_ADDRESS)
+            .withPassword(A_VALID_PASSWORD)
             .withCvuMP("1234567890123456789012")
             .withWalletAddress("12345678")
             .build()
