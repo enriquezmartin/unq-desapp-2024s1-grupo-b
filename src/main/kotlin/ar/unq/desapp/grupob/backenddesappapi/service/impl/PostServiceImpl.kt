@@ -1,7 +1,7 @@
 package ar.unq.desapp.grupob.backenddesappapi.service.impl
 
 import ar.unq.desapp.grupob.backenddesappapi.model.Post
-import ar.unq.desapp.grupob.backenddesappapi.model.StatusPost
+import ar.unq.desapp.grupob.backenddesappapi.model.PostStatus
 import ar.unq.desapp.grupob.backenddesappapi.repository.PostRepository
 import ar.unq.desapp.grupob.backenddesappapi.repository.PriceRepository
 import ar.unq.desapp.grupob.backenddesappapi.repository.UserRepository
@@ -25,10 +25,10 @@ class PostServiceImpl: PostService {
 
     @Autowired
     lateinit var userRepository: UserRepository
-    override fun intentPost(post: Post, id: Long): Post {
-        var lastPrice = priceRepository.findFirstByCryptoCurrencyOrderByPriceTimeDesc(post.cryptoCurrency!!)
-        var priceIsExceeded = post.price!! > lastPrice.value!! * 1.05F
-        var priceFallShort = post.price!! < lastPrice.value!! * 0.95F
+    override fun intentPost(aPost: Post, id: Long): Post {
+        var lastPrice = priceRepository.findFirstByCryptoCurrencyOrderByPriceTimeDesc(aPost.cryptoCurrency!!)
+        var priceIsExceeded = aPost.price!! > lastPrice.value!! * 1.05F
+        var priceFallShort = aPost.price!! < lastPrice.value!! * 0.95F
         if(priceIsExceeded || priceFallShort){
             throw PriceOutOfRangeException()
         }
@@ -36,14 +36,14 @@ class PostServiceImpl: PostService {
             val user = userRepository.findById(id).getOrElse {
                 throw UsernameNotFoundException("The user with id $id was not found")
             }
-            aPost.status = StatusPost.ACTIVE
+            aPost.status = PostStatus.ACTIVE
             user.addPost(aPost)
             userRepository.save(user)
             return aPost        }
     }
 
     override fun getActivePost(): List<Post> {
-        return postRepository.findByStatus(StatusPost.ACTIVE)
+        return postRepository.findByStatus(PostStatus.ACTIVE)
     }
 
     override fun saveAllPosts(posts: List<Post>) {

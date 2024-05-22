@@ -3,7 +3,7 @@ package ar.unq.desapp.grupob.backenddesappapi.dataInit
 import ar.unq.desapp.grupob.backenddesappapi.model.CryptoCurrency
 import ar.unq.desapp.grupob.backenddesappapi.model.OperationType
 import ar.unq.desapp.grupob.backenddesappapi.model.Post
-import ar.unq.desapp.grupob.backenddesappapi.model.StatusPost
+import ar.unq.desapp.grupob.backenddesappapi.model.PostStatus
 import ar.unq.desapp.grupob.backenddesappapi.service.PostService
 import ar.unq.desapp.grupob.backenddesappapi.service.UserService
 import org.springframework.boot.CommandLineRunner
@@ -25,8 +25,8 @@ class PostDataLoader(
             amount = 0.1f,
             price = 50000.0f,
             operationType = OperationType.PURCHASE,
-            status = StatusPost.ACTIVE
-        ).apply { this.user = user }
+            status = PostStatus.ACTIVE
+        ).apply { this.owner = user }
 
         postService.saveAllPosts(listOf(post1))
     }
