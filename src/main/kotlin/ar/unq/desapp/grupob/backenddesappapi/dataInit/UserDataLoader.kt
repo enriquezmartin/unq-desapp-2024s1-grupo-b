@@ -1,7 +1,6 @@
 package ar.unq.desapp.grupob.backenddesappapi.dataInit
 
 import ar.unq.desapp.grupob.backenddesappapi.model.UserEntity
-import ar.unq.desapp.grupob.backenddesappapi.repository.UserRepository
 import ar.unq.desapp.grupob.backenddesappapi.service.AuthService
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Bean

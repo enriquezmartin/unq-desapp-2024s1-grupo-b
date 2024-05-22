@@ -2,7 +2,6 @@ package ar.unq.desapp.grupob.backenddesappapi.repository
 
 import ar.unq.desapp.grupob.backenddesappapi.model.CryptoCurrency
 import ar.unq.desapp.grupob.backenddesappapi.model.Price
-import org.springframework.cglib.core.Local
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
