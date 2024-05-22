@@ -20,13 +20,17 @@ class UserServiceImpl : UserService {
     @Autowired
     lateinit var userDao: UserRepository
     override fun findUserByEmail(email: String): UserEntity? {
-        return userDao.findByEmail(email).toNullable()
+        return userDao.findByEmail(email)
+    }
+
+    fun findById(id: Long): UserEntity? {
+        return userDao.findById(id).toNullable()
     }
 
     override fun loadUserByUsername(username: String?): UserDetails {
-        var userdetails: UserEntity = userDao.findByEmail(username!!).orElseThrow {
-            throw UsernameNotFoundException("El usuario no existe")
-        }
+        var userdetails: UserEntity = userDao.findByEmail(username!!)
+            ?: throw UsernameNotFoundException("El usuario no existe")
+
         //println("user: ${userdetails.email}")
         var authorities: Set<GrantedAuthority> = listOf(SimpleGrantedAuthority("ROLE_USER") ).toSet()
         return User(userdetails.email, userdetails.password, true, true, true, true, authorities)

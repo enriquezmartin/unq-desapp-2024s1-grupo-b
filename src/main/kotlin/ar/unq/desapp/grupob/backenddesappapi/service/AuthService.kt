@@ -49,8 +49,8 @@ class AuthService {
                 loginDTO.password
             )
         )
-        val user: Optional<UserEntity> = userRepository.findByEmail(loginDTO.email)
-        logger.info("Login: ${user.get().email}")
-        return jwtService.generateToken(user.get())
+        val user: UserEntity? = userRepository.findByEmail(loginDTO.email)
+        logger.info("Login: ${user!!.email}")
+        return jwtService.generateToken(user)
     }
 }
