@@ -1,5 +1,6 @@
 package ar.unq.desapp.grupob.backenddesappapi.controller.Advicer
 
+import ar.unq.desapp.grupob.backenddesappapi.utils.PriceOutOfRangeException
 import ar.unq.desapp.grupob.backenddesappapi.utils.UserCannotBeRegisteredException
 import ar.unq.desapp.grupob.backenddesappapi.utils.UsernameAlreadyTakenException
 import org.slf4j.LoggerFactory
@@ -29,6 +30,11 @@ class GeneralControllerAdvicer {
     @ExceptionHandler(UserCannotBeRegisteredException::class)
     fun handleWrongUserRegister(e: RuntimeException): ResponseEntity<String> {
         return this.error(BAD_REQUEST, e)
+    }
+
+    @ExceptionHandler(PriceOutOfRangeException::class)
+    fun handleOutOfPriceException(e: RuntimeException): ResponseEntity<String> {
+        return this.error(FORBIDDEN, e)
     }
     protected fun error(status: HttpStatus, e: RuntimeException): ResponseEntity<String> {
         LOGGER.error(e.message)
