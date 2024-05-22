@@ -56,7 +56,7 @@ jobs:
           sudo apt-get install -y unzip
           curl -OL https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
         # curl -sSLo sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
-          unzip sonar-scanner-cli.zip
+          unzip sonar-scanner-cli-5.0.1.3006-linux.zip
           mv sonar-scanner-cli-5.0.1.3006-linux sonar-scanner
           export PATH=$PWD/sonar-scanner/bin:$PATH
 
