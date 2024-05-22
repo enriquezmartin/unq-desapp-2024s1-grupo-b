@@ -47,7 +47,7 @@ jobs:
 
       # Run tests with Gradle
       - name: Run tests with Gradle
-        run: ./gradlew jacocoTestReport
+        run: ./gradlew test
 
       # Install SonarScanner
       - name: Install SonarScanner
