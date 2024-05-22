@@ -57,7 +57,7 @@ jobs:
           echo "sonar.organization=desapp-grupo-b-2024s1" >> sonar-scanner/conf/sonar-scanner.properties
           echo "sonar.projectKey=enriquezmartin_unq-desapp-2024s1-grupo-b" >> sonar-scanner/conf/sonar-scanner.properties
           echo "sonar.projectName=CryptoExchange" >> sonar-scanner/conf/sonar-scanner.properties
-          echo "sonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml" >> sonar-scanner/conf/sonar-scanner.properties
+          echo "sonar.coverage.jacoco.xmlReportPaths=build/jacocoReportDir/test/jacocoTestReport.xml" >> sonar-scanner/conf/sonar-scanner.properties
           echo "sonar.coverage.exclusions=**/test/**" >> sonar-scanner/conf/sonar-scanner.properties
 
       # Run SonarScanner
