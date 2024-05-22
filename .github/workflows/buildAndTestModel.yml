@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: REAL-CI
+name: CI
 
 # Controls when the workflow will run
 on:
@@ -25,12 +25,12 @@ jobs:
 
       # Cache Gradle dependencies
       - name: Cache Gradle dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v2
         with:
-          path: |
-            ~/.gradle/caches
-          key: gradle-${{ runner.os }} gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: ${{ runner.os }}-gradle-
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       # Sets up JDK
       - name: Set up JDK
@@ -47,30 +47,34 @@ jobs:
       # Run tests with Gradle
       - name: Run tests with Gradle
         run: ./gradlew test
-
       # Install SonarScanner
       - name: Install SonarScanner
         run: |
           sudo apt-get update
           sudo apt-get install -y unzip
-          curl -sSLo sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+          curl -OL https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
           unzip sonar-scanner-cli-5.0.1.3006-linux.zip
-          mv sonar-scanner-cli-5.0.1.3006-linux sonar-scanner
-          export PATH=$PWD/sonar-scanner/bin:$PATH
+          export PATH=$PWD/sonar-scanner-5.0.1.3006-linux/bin:$PATH
 
       # Configure SonarScanner properties
       - name: Configure SonarScanner
         run: |
-          echo "sonar.host.url=https://sonarcloud.io" >> sonar-scanner/conf/sonar-scanner.properties
-          echo "sonar.token=${{ secrets.SONAR_TOKEN }}" >> sonar-scanner/conf/sonar-scanner.properties
-          echo "sonar.organization=desapp-grupo-b-2024s1" >> sonar-scanner/conf/sonar-scanner.properties
-          echo "sonar.projectKey=enriquezmartin_unq-desapp-2024s1-grupo-b" >> sonar-scanner/conf/sonar-scanner.properties
-          echo "sonar.projectName=CryptoExchange" >> sonar-scanner/conf/sonar-scanner.properties
-          echo "sonar.coverage.jacoco.xmlReportPaths=build/jacocoReportDir/test/jacocoTestReport.xml" >> sonar-scanner/conf/sonar-scanner.properties
-          echo "sonar.coverage.exclusions=**/test/**" >> sonar-scanner/conf/sonar-scanner.properties
-          echo "sonar.coverage.exclusions=**/main/kotlin/ar/unq/desapp/grupob/backenddesappapi/dtos/**" >> sonar-scanner/conf/sonar-scanner.properties
+          echo "sonar.host.url=https://sonarcloud.io" >> sonar-scanner-5.0.1.3006-linux/conf/sonar-scanner.properties
+          echo "sonar.token=${{ secrets.SONAR_TOKEN }}" >> sonar-scanner-5.0.1.3006-linux/conf/sonar-scanner.properties
+          echo "sonar.organization=desapp-grupo-b-2024s1" >> sonar-scanner-5.0.1.3006-linux/conf/sonar-scanner.properties
+          echo "sonar.projectKey=enriquezmartin_unq-desapp-2024s1-grupo-b" >> sonar-scanner-5.0.1.3006-linux/conf/sonar-scanner.properties
+          echo "sonar.projectName=CryptoExchange" >> sonar-scanner-5.0.1.3006-linux/conf/sonar-scanner.properties
+          echo "sonar.coverage.jacoco.xmlReportPaths=build/jacocoReportDir/test/jacocoTestReport.xml" >> sonar-scanner-5.0.1.3006-linux/conf/sonar-scanner.properties
 
+      # Configure Java version
+      - name: Set up Java 17 for SonarScanner
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: '17'
       # Run SonarScanner
       - name: Run SonarScanner
         run: |
-          sonar-scanner/bin/sonar-scanner
+          sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner
+      # \
+      # -Dsonar.coverage.jacoco.xmlReportPaths=build/jacocoReportDir/testjacocoTestReport.xml
