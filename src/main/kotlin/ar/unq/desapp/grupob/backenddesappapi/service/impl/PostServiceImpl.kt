@@ -36,10 +36,11 @@ class PostServiceImpl: PostService {
             val user = userRepository.findById(id).getOrElse {
                 throw UsernameNotFoundException("The user with id $id was not found")
             }
-            aPost.status = PostStatus.ACTIVE
+            postRepository.save(aPost)
             user.addPost(aPost)
             userRepository.save(user)
-            return aPost        }
+            return aPost
+        }
     }
 
     override fun getActivePost(): List<Post> {

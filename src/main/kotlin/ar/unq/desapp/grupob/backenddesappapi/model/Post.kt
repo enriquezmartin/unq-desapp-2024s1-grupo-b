@@ -12,7 +12,7 @@ class Post(){
     var amount: Float?= null
     var price: Float?= null
     var operationType: OperationType?= null
-    var createdDate: LocalDate? = null
+    var createdDate: LocalDate? = LocalDate.now()
     var status: PostStatus? = null
     constructor(cryptoCurrency: CryptoCurrency,
                 amount: Float,
@@ -23,7 +23,6 @@ class Post(){
         this.amount = amount
         this.price = price
         this.operationType = operationType
-        this.createdDate = LocalDate.now()
         this.status = status
     }
 

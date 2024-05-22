@@ -36,5 +36,12 @@ class PriceServiceImpl : PriceService{
         return priceRepository.findAll()
     }
 
+    override fun getPrices(cryptoCurrency: CryptoCurrency): List<Price> {
+        return priceRepository.findByCryptoCurrency(cryptoCurrency)
+    }
 
+
+    override fun getLatestPrices(cryptoCurrency: CryptoCurrency): List<Price> {
+        return priceRepository.findByCryptoCurrencyAndPriceTimeAfter(cryptoCurrency)
+    }
 }

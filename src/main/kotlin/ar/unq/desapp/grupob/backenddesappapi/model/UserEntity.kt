@@ -48,6 +48,7 @@ class UserEntity(){
     }
 
     fun addPost(post: Post) {
+        post.status = PostStatus.ACTIVE
         intents.add(post)
         post.owner = this
     }
