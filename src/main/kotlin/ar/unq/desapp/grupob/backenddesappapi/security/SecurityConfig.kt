@@ -27,9 +27,10 @@ class SecurityConfig {
     fun securityFilterChain(httpSecurity: HttpSecurity): SecurityFilterChain {
         return httpSecurity
             .csrf { it.disable() }
+            .headers { it -> it.frameOptions { it.disable() }}
             .authorizeHttpRequests {
 
-            it.requestMatchers("/login/**", "/register/**", "/swagger-ui/**", "/api-docs/**", "/binance/**","/dolarapi/**").permitAll() }
+            it.requestMatchers("/login/**", "/register/**", "/swagger-ui/**", "/api-docs/**", "/binance/**","/dolarapi/**", "/h2-console/**").permitAll() }
                 .authorizeHttpRequests { it.anyRequest().authenticated() }
 //            .authorizeHttpRequests { conf ->
 //                conf.requestMatchers("admin/**").hasAuthority("ADMIN")
