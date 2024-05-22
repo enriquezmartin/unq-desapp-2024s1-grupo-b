@@ -31,9 +31,9 @@ class PriceController {
     fun updatePrices(): String{
         try{
             priceService.updatePrices()
-            return "todo salio bonito"
+            return "Prices updated successfully"
         } catch (e: Exception){
-            return "Ay fallo"
+            return "Prices update failed"
         }
     }
 }
