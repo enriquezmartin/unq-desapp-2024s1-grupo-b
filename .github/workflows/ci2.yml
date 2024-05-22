@@ -40,7 +40,7 @@ jobs:
 
       # Run tests and generate JaCoCo coverage report
       - name: Test with Gradle
-        run: ./gradlew jacocoTestReport
+        run: ./gradlew test
 
       # Download and set up SonarScanner
       - name: Download SonarScanner
