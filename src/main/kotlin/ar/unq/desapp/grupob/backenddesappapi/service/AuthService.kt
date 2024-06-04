@@ -3,7 +3,6 @@ package ar.unq.desapp.grupob.backenddesappapi.service
 import ar.unq.desapp.grupob.backenddesappapi.dtos.LoginDTO
 import ar.unq.desapp.grupob.backenddesappapi.model.UserEntity
 import ar.unq.desapp.grupob.backenddesappapi.repository.UserRepository
-import ar.unq.desapp.grupob.backenddesappapi.thirdApiService.PriceAutoUpdater
 import ar.unq.desapp.grupob.backenddesappapi.utils.UsernameAlreadyTakenException
 import jakarta.transaction.Transactional
 import org.slf4j.LoggerFactory
@@ -13,7 +12,6 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
 @Transactional

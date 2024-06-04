@@ -27,7 +27,7 @@ class SecurityConfig {
     fun securityFilterChain(httpSecurity: HttpSecurity): SecurityFilterChain {
         return httpSecurity
             .csrf { it.disable() }
-            .headers { it -> it.frameOptions { it.disable() }}
+            .headers { header -> header.frameOptions { it.disable() }}
             .authorizeHttpRequests {
 
             it.requestMatchers("/login/**", "/register/**", "/swagger-ui/**", "/api-docs/**", "/binance/**","/dolarapi/**", "/h2-console/**", "/actuator/**").permitAll() }

@@ -9,7 +9,6 @@ import ar.unq.desapp.grupob.backenddesappapi.thirdApiService.dolarApi.DolarApiSe
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.time.LocalDate
 
 @Transactional
 @Service

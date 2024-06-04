@@ -1,6 +1,5 @@
 package ar.unq.desapp.grupob.backenddesappapi.thirdApiService.dolarApi
 
-import ar.unq.desapp.grupob.backenddesappapi.thirdApiService.binance.BinancePriceResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
