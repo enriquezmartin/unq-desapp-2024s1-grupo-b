@@ -40,6 +40,8 @@ dependencies {
 	implementation("io.jsonwebtoken:jjwt-root:${jsonWebTokenVersion}")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${openapiVersion}")
 	implementation("javax.validation:validation-api:${validationApiVersion}")
+	implementation ("org.springframework.boot:spring-boot-starter-actuator")
+	implementation ("io.micrometer:micrometer-registry-prometheus")
 
 	testImplementation("org.mockito:mockito-core:${mockitoVersion}")
 	testImplementation("org.springframework.security:spring-security-test")
