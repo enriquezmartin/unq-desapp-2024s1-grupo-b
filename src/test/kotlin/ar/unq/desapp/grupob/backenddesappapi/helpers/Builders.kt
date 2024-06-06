@@ -1,12 +1,47 @@
 package ar.unq.desapp.grupob.backenddesappapi.helpers
 
 import ar.unq.desapp.grupob.backenddesappapi.model.*
+import org.springframework.security.core.userdetails.User
 import java.time.LocalDate
+import java.time.LocalDateTime
 
+class OperationBuilder(){
+    private var id: Long? = 1L
+    private var dateTime: LocalDateTime = LocalDateTime.now()
+    private var status: OperationStatus = OperationStatus.CANCELLED
+    private var post: Post? = null
+    private var client: UserEntity? = null
+
+    fun build(): CryptoOperation{
+        val operation = CryptoOperation(dateTime, status, post!!, client!!)
+        operation.id = id!!
+        return operation
+    }
+    fun withId(id: Long): OperationBuilder {
+        this.id = id
+        return this
+    }
+    fun withDateTime(date: LocalDateTime): OperationBuilder{
+        this.dateTime = date
+        return this
+    }
+    fun withStatus(status: OperationStatus): OperationBuilder{
+        this.status = status
+        return this
+    }
+    fun withPost(post: Post): OperationBuilder{
+        this.post = post
+        return this
+    }
+    fun withClient(client: UserEntity): OperationBuilder{
+        this.client = client
+        return this
+    }
+}
 class PriceBuilder(){
     private var id: Long? = 1L
     private var cryptoCurrency: CryptoCurrency = CryptoCurrency.ALICEUSDT
-    private var priceTime: LocalDate = LocalDate.now()
+    private var priceTime: LocalDateTime = LocalDateTime.now()
     private var value: Float = 10F
 
     fun build(): Price {
@@ -22,7 +57,7 @@ class PriceBuilder(){
         this.cryptoCurrency = currency
         return this
     }
-    fun withPriceTime(priceTime: LocalDate): PriceBuilder {
+    fun withPriceTime(priceTime: LocalDateTime): PriceBuilder {
         this.priceTime = priceTime
         return this
     }
@@ -39,7 +74,7 @@ class PostBuilder(){
     private var amount: Float = 1F
     private var price: Float = 10F
     private var operationType: OperationType = OperationType.SALE
-    private var createdDate: LocalDate = LocalDate.now()
+    private var createdDate: LocalDateTime = LocalDateTime.now()
     private var status: PostStatus = PostStatus.ACTIVE
     private var user: UserEntity? = null
 
@@ -75,7 +110,7 @@ class PostBuilder(){
         return this
     }
 
-    fun withCreatedDate(createdDate: LocalDate): PostBuilder {
+    fun withCreatedDate(createdDate: LocalDateTime): PostBuilder {
         this.createdDate = createdDate
         return this
     }
@@ -102,6 +137,8 @@ class UserBuilder(){
     private var password: String? = "Pass*_word"
     private var cvuMP: String? = "1234567890123456789012"
     private var walletAddress: String? = "12345678"
+    private var score: Int = 0
+    private var succesfulOperations: Int = 0
 
     fun build(): UserEntity{
         val user: UserEntity = UserEntity(email, password, name, surname, address, cvuMP, walletAddress)
@@ -147,6 +184,15 @@ class UserBuilder(){
 
     fun withWalletAddress(walletAddress: String): UserBuilder {
         this.walletAddress = walletAddress
+        return this
+    }
+    fun withScore(score: Int): UserBuilder{
+        this.score = score
+        return this
+    }
+
+    fun withSuccesfulOperations(number: Int): UserBuilder{
+        this.succesfulOperations = number
         return this
     }
 

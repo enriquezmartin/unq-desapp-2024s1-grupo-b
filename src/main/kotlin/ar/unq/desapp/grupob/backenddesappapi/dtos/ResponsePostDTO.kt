@@ -1,6 +1,7 @@
 package ar.unq.desapp.grupob.backenddesappapi.dtos
 
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 data class ResponsePostDTO(
     val id: Long,
@@ -9,7 +10,7 @@ data class ResponsePostDTO(
     val price: Float,
     val user: UserDTO,
     val operation: String,
-    val createdDate: LocalDate
+    val createdDate: LocalDateTime
 ){
     var priceInArs: Float? = null
 }

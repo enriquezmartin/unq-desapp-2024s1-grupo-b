@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.junit.jupiter.api.Assertions.assertTrue
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 
 @SpringBootTest
@@ -45,20 +46,22 @@ class PriceRepositoryTest {
     @Test
     fun `get prices for a given crypto active returns prices from the last 24hs`(){
         val testPrice = Price(CryptoCurrency.AAVEUSDT,2.5F)
-        val oldPrice = Price(CryptoCurrency.AAVEUSDT,2.4F, LocalDate.now().minusDays(2))
+        val oldPrice = Price(CryptoCurrency.AAVEUSDT,2.4F, LocalDateTime.now().minusDays(2))
         priceRepository.save(testPrice)
         priceRepository.save(oldPrice)
-        val aave = priceRepository.findByCryptoCurrencyAndPriceTimeAfter(CryptoCurrency.AAVEUSDT)
+        val result = priceRepository.findByCryptoCurrencyAndPriceTimeAfter(CryptoCurrency.AAVEUSDT)
 
-        assertEquals(CryptoCurrency.AAVEUSDT, aave.first().cryptoCurrency)
-        assertEquals(2.5F, aave.first().value)
-        assertEquals(1,aave.size)
+        val isTestPriceInResult = result.any { it.id == testPrice.id }
+        val isOldPriceNotInResult = !result.any {it.id == oldPrice.id}
+
+        assertTrue(isTestPriceInResult)
+        assertTrue(isOldPriceNotInResult)
     }
 
     @Test
     fun `get last price`(){
         val testPrice = Price(CryptoCurrency.AAVEUSDT,2.5F)
-        val oldPrice = Price(CryptoCurrency.AAVEUSDT,2.4F, LocalDate.now().minusDays(2))
+        val oldPrice = Price(CryptoCurrency.AAVEUSDT,2.4F, LocalDateTime.now().minusDays(2))
         priceRepository.save(testPrice)
         priceRepository.save(oldPrice)
         val result = priceRepository.findFirstByCryptoCurrencyOrderByPriceTimeDesc(CryptoCurrency.AAVEUSDT)

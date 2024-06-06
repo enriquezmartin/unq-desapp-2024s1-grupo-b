@@ -2,6 +2,7 @@ package ar.unq.desapp.grupob.backenddesappapi.model
 
 import jakarta.persistence.*
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Entity
 class Post(){
@@ -12,7 +13,7 @@ class Post(){
     var amount: Float?= null
     var price: Float?= null
     var operationType: OperationType?= null
-    var createdDate: LocalDate? = LocalDate.now()
+    var createdDate: LocalDateTime? = LocalDateTime.now()
     var status: PostStatus? = null
     constructor(cryptoCurrency: CryptoCurrency,
                 amount: Float,

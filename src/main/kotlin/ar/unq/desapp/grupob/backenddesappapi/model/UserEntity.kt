@@ -2,6 +2,9 @@ package ar.unq.desapp.grupob.backenddesappapi.model
 
 import ar.unq.desapp.grupob.backenddesappapi.utils.UserValidator
 import jakarta.persistence.*
+import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "users")
@@ -22,8 +25,8 @@ class UserEntity(){
     @Column(nullable = false, unique = true)
     var walletAddress: String? = null
 
-    var operations: Int = 0
-    var points: Int = 0
+    var succesfulOperation: Int = 0
+    var score: Int = 0
 
     @OneToMany(mappedBy = "owner", cascade = [CascadeType.MERGE], orphanRemoval = true)
     val intents: MutableList<Post> = mutableListOf()
@@ -51,6 +54,29 @@ class UserEntity(){
         post.status = PostStatus.ACTIVE
         intents.add(post)
         post.owner = this
+    }
+
+    fun confirm(operation: CryptoOperation): CryptoOperation {
+        var score = 0
+        if(isWithinMinutes(LocalDateTime.now(), operation.dateTime, 30)){
+            score = 10
+        }
+        else{
+            score = 5
+        }
+        this.score = score
+        this.succesfulOperation ++
+
+        operation.client!!.score = score
+        operation.client!!.succesfulOperation ++
+        operation.status = OperationStatus.CLOSED
+        operation.post!!.status = PostStatus.CLOSED
+        return operation
+    }
+
+    private fun isWithinMinutes(dateTime1: LocalDateTime, dateTime2: LocalDateTime, minutes: Int): Boolean {
+        val duration = Duration.between(dateTime1, dateTime2).abs()
+        return duration.toMinutes() <= minutes
     }
 
 }

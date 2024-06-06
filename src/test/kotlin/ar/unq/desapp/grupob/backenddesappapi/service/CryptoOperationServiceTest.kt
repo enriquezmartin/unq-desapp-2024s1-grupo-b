@@ -1,5 +1,6 @@
 package ar.unq.desapp.grupob.backenddesappapi.service
 
+import ar.unq.desapp.grupob.backenddesappapi.helpers.OperationBuilder
 import ar.unq.desapp.grupob.backenddesappapi.helpers.PostBuilder
 import ar.unq.desapp.grupob.backenddesappapi.helpers.PriceBuilder
 import ar.unq.desapp.grupob.backenddesappapi.helpers.UserBuilder
@@ -53,28 +54,59 @@ class CryptoOperationServiceTest {
         val operation = service.payoutNotification(post.id!!, client.id!!)
 
         assertEquals(operation.status, OperationStatus.IN_PROGRESS)
-        assertEquals(operation.post.status, PostStatus.IN_PROGRESS)
-        assertEquals(operation.client.id, client.id)
+        assertEquals(operation.post!!.status, PostStatus.IN_PROGRESS)
+        assertEquals(operation.client!!.id, client.id)
 
     }
 
     @Test
     fun `when price is out of range for a post in payout notification the post become cancelled`(){
-//        var client = UserBuilder().build()
-//        var post = PostBuilder()
-//            .withOperationType(OperationType.PURCHASE)
-//            .withCryptoCurrency(CryptoCurrency.AAVEUSDT)
-//            .withPrice(10F)
-//            .build()
-//        var price = PriceBuilder()
-//            .withValue(15F)
-//            .build()
-//
-//        `when`(userRepository.findById(client.id!!)).thenReturn(Optional.of(client))
-//        `when`(postRepository.findById(post.id!!)).thenReturn(Optional.of(post))
-//        `when`(priceRepository.findFirstByCryptoCurrencyOrderByPriceTimeDesc(post.cryptoCurrency!!)).thenReturn(price)
-//
-//        val savedPost = service.payoutNotification(post.id!!, client.id!!)
+        var client = UserBuilder().build()
+        var post = PostBuilder()
+            .withOperationType(OperationType.PURCHASE)
+            .withCryptoCurrency(CryptoCurrency.AAVEUSDT)
+            .withPrice(10F)
+            .build()
+        var price = PriceBuilder()
+            .withValue(15F)
+            .build()
+
+        `when`(userRepository.findById(client.id!!)).thenReturn(Optional.of(client))
+        `when`(postRepository.findById(post.id!!)).thenReturn(Optional.of(post))
+        `when`(priceRepository.findFirstByCryptoCurrencyOrderByPriceTimeDesc(post.cryptoCurrency!!)).thenReturn(price)
+
+        val operation = service.payoutNotification(post.id!!, client.id!!)
+
+        assertEquals(operation.status, OperationStatus.CANCELLED)
+        assertEquals(operation.post!!.status, PostStatus.ACTIVE)
+    }
+
+    @Test
+    fun `confirm`(){
+        var owner = UserBuilder()
+            .build()
+        var client = UserBuilder()
+            .build()
+        var post = PostBuilder()
+            .withStatus(PostStatus.IN_PROGRESS)
+            .build()
+        var operation = OperationBuilder()
+            .withStatus(OperationStatus.IN_PROGRESS)
+            .withPost(post)
+            .withClient(client)
+            .build()
+
+        `when`(cryptoOperationRepository.findById(operation.id!!)).thenReturn(Optional.of(operation))
+        `when`(userRepository.findById(owner.id!!)).thenReturn(Optional.of(owner))
+
+        service.confirmOperation(owner.id!!, operation.id!!)
+
+        assertEquals(owner.score,10)
+        assertEquals(post.status, PostStatus.CLOSED)
+        assertEquals(operation.status, OperationStatus.CLOSED)
+        assertEquals(client.score,10)
+        assertEquals(owner.succesfulOperation, 1)
+        assertEquals(client.succesfulOperation, 1)
 
     }
 
