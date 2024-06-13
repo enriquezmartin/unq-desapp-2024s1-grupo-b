@@ -1,23 +1,22 @@
 package ar.unq.desapp.grupob.backenddesappapi.model
 
+import ar.unq.desapp.grupob.backenddesappapi.helpers.PostBuilder
+import ar.unq.desapp.grupob.backenddesappapi.helpers.PriceBuilder
 import ar.unq.desapp.grupob.backenddesappapi.helpers.UserBuilder
+import ar.unq.desapp.grupob.backenddesappapi.utils.UnavailablePostException
 import ar.unq.desapp.grupob.backenddesappapi.utils.UserCannotBeRegisteredException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 private const val A_VALID_NAME = "a valid name"
-
 private const val A_VALID_SURNAME = "a valid surname"
-
 private const val A_VALID_EMAIL = "valid@asd.com"
-
 private const val A_VALID_ADDRESS = "a valid address"
-
 private const val A_VALID_PASSWORD = "Pass*Word"
 
-class UserEntityTest {
 
+class UserEntityTest {
     @Test
     fun `when an user with invalid name is created an exception is raised`(){
         val expectedError = "The name is too short or too long"
@@ -33,7 +32,6 @@ class UserEntityTest {
         assertEquals(excWhenTooShort, expectedError )
         assertEquals(excWhenTooLong, expectedError )
     }
-
     @Test
     fun `when an user with invalid surname is created an exception is raised`(){
         var expectedError = "The surname is too short or too long"
@@ -46,7 +44,6 @@ class UserEntityTest {
         assertEquals(expectedError, excWhenTooShort )
         assertEquals(expectedError, excWhenTooLong )
     }
-
     @Test
     fun `when an user with invalid email is created an exception is raised`(){
         var expectedError = "The email does not have a valid format"
@@ -63,7 +60,6 @@ class UserEntityTest {
         assertEquals(expectedError, excWhenNothingAfterDot )
         assertEquals(expectedError, excWhenAtAndDotTogether )
     }
-
     @Test
     fun `when an user with invalid address is created an exception is raised`(){
         var expectedError = "The address is too short or too long"
@@ -78,7 +74,6 @@ class UserEntityTest {
         assertEquals(expectedError, excWhenShortAddress )
         assertEquals(expectedError, excWhenLargeAddress )
     }
-
     @Test
     fun `when an user with invalid or null password is created, an exception is raised`(){
         val expectedError = "The password is too weak"
@@ -99,7 +94,6 @@ class UserEntityTest {
         assertEquals(expectedError, excWithNoUpperCase )
         assertEquals(expectedError, excTooShort )
     }
-
     @Test
     fun `when an user with invalid or null cvu is created, an exception is raised`(){
         val expectedError = "The cvu must have 22 digits"
@@ -121,7 +115,6 @@ class UserEntityTest {
         assertEquals(expectedError, excWhenMoreThan22 )
         assertEquals(expectedError, excWhenLettersInsteadOfNumbers )
     }
-
     @Test
     fun `when an user with invalid or null walletAddress is created, an exception is raised`(){
         val expectedError = "The wallet address must have 8 digits"
@@ -144,7 +137,6 @@ class UserEntityTest {
         assertEquals(expectedError, excWhenMoreThan8 )
         assertEquals(expectedError, excWhenLettersInsteadOfNumbers )
     }
-
     @Test
     fun `when a user with all valid attributes is created, no exception is raised`(){
         val validUser = UserBuilder()
@@ -157,4 +149,5 @@ class UserEntityTest {
             .withWalletAddress("12345678")
             .build()
     }
+
 }

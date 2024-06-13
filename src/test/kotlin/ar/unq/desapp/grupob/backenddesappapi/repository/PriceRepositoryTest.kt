@@ -1,6 +1,7 @@
 package ar.unq.desapp.grupob.backenddesappapi.repository
 
 import ar.unq.desapp.grupob.backenddesappapi.helpers.DataSpringService
+import ar.unq.desapp.grupob.backenddesappapi.helpers.PriceBuilder
 import ar.unq.desapp.grupob.backenddesappapi.model.CryptoCurrency
 import ar.unq.desapp.grupob.backenddesappapi.model.Price
 import org.junit.jupiter.api.AfterEach
@@ -45,8 +46,8 @@ class PriceRepositoryTest {
 
     @Test
     fun `get prices for a given crypto active returns prices from the last 24hs`(){
-        val testPrice = Price(CryptoCurrency.AAVEUSDT,2.5F)
-        val oldPrice = Price(CryptoCurrency.AAVEUSDT,2.4F, LocalDateTime.now().minusDays(2))
+        val testPrice = PriceBuilder().withCryptoCurrency(CryptoCurrency.AAVEUSDT).withValue(2.5f).build()
+        val oldPrice = PriceBuilder().withCryptoCurrency(CryptoCurrency.AAVEUSDT).withPriceTime(LocalDateTime.now().minusDays(2)).build()
         priceRepository.save(testPrice)
         priceRepository.save(oldPrice)
         val result = priceRepository.findByCryptoCurrencyAndPriceTimeAfter(CryptoCurrency.AAVEUSDT)
@@ -54,14 +55,14 @@ class PriceRepositoryTest {
         val isTestPriceInResult = result.any { it.id == testPrice.id }
         val isOldPriceNotInResult = !result.any {it.id == oldPrice.id}
 
-        assertTrue(isTestPriceInResult)
-        assertTrue(isOldPriceNotInResult)
+        assertTrue(isTestPriceInResult, "asd")
+        assertTrue(isOldPriceNotInResult,"dsa")
     }
 
     @Test
     fun `get last price`(){
-        val testPrice = Price(CryptoCurrency.AAVEUSDT,2.5F)
-        val oldPrice = Price(CryptoCurrency.AAVEUSDT,2.4F, LocalDateTime.now().minusDays(2))
+        val testPrice = PriceBuilder().withCryptoCurrency(CryptoCurrency.AAVEUSDT).withValue(2.5f).build()
+        val oldPrice = PriceBuilder().withCryptoCurrency(CryptoCurrency.AAVEUSDT).withPriceTime(LocalDateTime.now().minusDays(2)).build()
         priceRepository.save(testPrice)
         priceRepository.save(oldPrice)
         val result = priceRepository.findFirstByCryptoCurrencyOrderByPriceTimeDesc(CryptoCurrency.AAVEUSDT)
