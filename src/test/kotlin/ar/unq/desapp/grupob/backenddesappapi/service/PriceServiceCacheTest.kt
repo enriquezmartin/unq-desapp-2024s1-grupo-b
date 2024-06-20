@@ -1,22 +1,21 @@
 package ar.unq.desapp.grupob.backenddesappapi.service
 
-import ar.unq.desapp.grupob.backenddesappapi.thirdApiService.dolarApi.DolarPriceResponse
-import ar.unq.desapp.grupob.backenddesappapi.model.*
+import ar.unq.desapp.grupob.backenddesappapi.model.CryptoCurrency
+import ar.unq.desapp.grupob.backenddesappapi.model.Price
 import ar.unq.desapp.grupob.backenddesappapi.repository.PriceRepository
 import ar.unq.desapp.grupob.backenddesappapi.thirdApiService.binance.BinanceApiService
 import ar.unq.desapp.grupob.backenddesappapi.thirdApiService.binance.BinancePriceResponse
 import ar.unq.desapp.grupob.backenddesappapi.thirdApiService.dolarApi.DolarApiService
+import ar.unq.desapp.grupob.backenddesappapi.thirdApiService.dolarApi.DolarPriceResponse
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.cache.CacheManager
 import org.springframework.cache.annotation.EnableCaching
-import org.springframework.cache.get
 
 @EnableCaching
 @SpringBootTest
