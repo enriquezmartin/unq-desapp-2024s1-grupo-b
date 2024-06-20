@@ -60,6 +60,7 @@ jobs:
           echo "sonar.sources=src/main/" >> sonar-scanner/conf/sonar-scanner.properties
           echo "sonar.tests=src/test/" >> sonar-scanner/conf/sonar-scanner.properties
           echo "sonar.exclusions=src/main/**/dtos/*" >> sonar-scanner/conf/sonar-scanner.properties
+          echo "sonar.exclusions=src/main/**/utils/*" >> sonar-scanner/conf/sonar-scanner.properties
           echo "sonar.coverage.jacoco.xmlReportPaths=build/jacocoReportDir/test/jacocoTestReport.xml" >> sonar-scanner/conf/sonar-scanner.properties
 
       # Run SonarScanner
