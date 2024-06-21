@@ -13,8 +13,8 @@ class OperationBuilder(){
     private var client: UserEntity? = null
 
     fun build(): CryptoOperation{
-        val operation = CryptoOperation(post!!, client!!)
-        operation.id = id!!
+        val operation = CryptoOperation(post!!, client)
+        operation.id = id
         operation.status = status
         operation.dateTime = dateTime
         return operation

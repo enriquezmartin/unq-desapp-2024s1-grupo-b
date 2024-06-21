@@ -1,5 +1,6 @@
 package ar.unq.desapp.grupob.backenddesappapi.model
 
+import ar.unq.desapp.grupob.backenddesappapi.helpers.OperationBuilder
 import ar.unq.desapp.grupob.backenddesappapi.helpers.PostBuilder
 import ar.unq.desapp.grupob.backenddesappapi.helpers.PriceBuilder
 import ar.unq.desapp.grupob.backenddesappapi.helpers.UserBuilder
@@ -18,6 +19,8 @@ private const val INVALID_POST_FOR_PAYMENT_ERROR_MSG = "The post is not availabl
 private const val INVALID_USER_FOR_PAYMENT_ERROR_MSG = "The client cannot be the same as the post owner"
 
 class CryptoOperationTest {
+
+    //OPERATION CREATION
     @Test
     fun `when an operation is initialized on a purchase post and the value in the latest price is above the price on the post, an exception is raised`(){
         val post: Post = PostBuilder().withOperationType(OperationType.PURCHASE).withPrice(10f).build()
@@ -61,7 +64,7 @@ class CryptoOperationTest {
         assertEquals(errorMsg, INVALID_USER_FOR_PAYMENT_ERROR_MSG)
     }
     @Test
-    fun `operations created successfully`(){
+    fun `when an operations is created successfully, its status and the status of its post are in progress`(){
         val currentTime: LocalDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)
         val client: UserEntity = UserBuilder().withId(1L).build()
         val owner: UserEntity = UserBuilder().withId(2L).build()
@@ -81,6 +84,5 @@ class CryptoOperationTest {
         assertEquals(purchaseOperation.post!!.status, PostStatus.IN_PROGRESS)
         assertEquals(saleOperation.post!!.status, PostStatus.IN_PROGRESS)
     }
-
 
 }

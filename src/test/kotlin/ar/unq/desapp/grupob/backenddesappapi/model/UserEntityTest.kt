@@ -1,13 +1,15 @@
 package ar.unq.desapp.grupob.backenddesappapi.model
 
+import ar.unq.desapp.grupob.backenddesappapi.helpers.OperationBuilder
 import ar.unq.desapp.grupob.backenddesappapi.helpers.PostBuilder
-import ar.unq.desapp.grupob.backenddesappapi.helpers.PriceBuilder
 import ar.unq.desapp.grupob.backenddesappapi.helpers.UserBuilder
-import ar.unq.desapp.grupob.backenddesappapi.utils.UnavailablePostException
+import ar.unq.desapp.grupob.backenddesappapi.utils.InvalidOperationException
+import ar.unq.desapp.grupob.backenddesappapi.utils.InvalidUserToConfirmException
 import ar.unq.desapp.grupob.backenddesappapi.utils.UserCannotBeRegisteredException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import java.time.LocalDateTime
 
 private const val A_VALID_NAME = "a valid name"
 private const val A_VALID_SURNAME = "a valid surname"
@@ -15,6 +17,7 @@ private const val A_VALID_EMAIL = "valid@asd.com"
 private const val A_VALID_ADDRESS = "a valid address"
 private const val A_VALID_PASSWORD = "Pass*Word"
 
+private const val STATUS_OPERATION_ERROR = "Operation with status confirmed or cancelled can not be confirmed."
 
 class UserEntityTest {
     @Test
@@ -148,6 +151,88 @@ class UserEntityTest {
             .withCvuMP("1234567890123456789012")
             .withWalletAddress("12345678")
             .build()
+    }
+
+    // RELATED TO OPERATIONS
+
+    @Test
+    fun `When a user tries to confirm the receipt of an operation which they do not own, an exception is raised`(){
+        val otherUser: UserEntity = UserBuilder().withId(1L).build()
+        val owner: UserEntity = UserBuilder().withId(2L).build()
+        var post = PostBuilder()
+            .withStatus(PostStatus.IN_PROGRESS)
+            .withUser(otherUser)
+            .build()
+        val operation =
+            OperationBuilder()
+                .withStatus(OperationStatus.IN_PROGRESS)
+                .withPost(post)
+                .build()
+        val errorMsg = assertThrows<InvalidUserToConfirmException> { owner.confirm(operation) }.message
+
+        assertEquals("Only the owner can confirm this operation.", errorMsg)
+    }
+
+    @Test
+    fun `when a confirmation is requested on a operation that is not in progress, an exception is raised`(){
+        val client: UserEntity = UserBuilder().withId(1L).build()
+        val owner: UserEntity = UserBuilder().withId(2L).build()
+        var post = PostBuilder()
+            .withStatus(PostStatus.IN_PROGRESS)
+            .withUser(owner)
+            .build()
+        val closedOperation =
+            OperationBuilder()
+                .withStatus(OperationStatus.CLOSED)
+                .withPost(post)
+                .withClient(client)
+                .build()
+        val cancelledOperation =
+            OperationBuilder()
+                .withStatus(OperationStatus.CANCELLED)
+                .withPost(post)
+                .withClient(client)
+                .build()
+
+        val closedErrorMsg = assertThrows<InvalidOperationException> { owner.confirm(closedOperation) }.message
+        val cancelledErrorMsg = assertThrows<InvalidOperationException> { owner.confirm(cancelledOperation) }.message
+
+        assertEquals(closedErrorMsg, STATUS_OPERATION_ERROR)
+        assertEquals(cancelledErrorMsg, STATUS_OPERATION_ERROR)
+    }
+
+
+    @Test
+    fun `confirm operation`(){
+        var client: UserEntity = UserBuilder().withId(1L).withSuccesfulOperations(0).build()
+        var owner: UserEntity = UserBuilder().withId(2L).withScore(0).withSuccesfulOperations(0).build()
+        var post = PostBuilder()
+            .withStatus(PostStatus.IN_PROGRESS)
+            .withUser(owner)
+            .build()
+        val operationScore10 =
+            OperationBuilder()
+                .withDateTime(LocalDateTime.now())
+                .withStatus(OperationStatus.IN_PROGRESS)
+                .withPost(post)
+                .withClient(client)
+                .build()
+
+        val operationScore5 =
+            OperationBuilder()
+                .withDateTime(LocalDateTime.now().minusDays(1))
+                .withStatus(OperationStatus.IN_PROGRESS)
+                .withPost(post)
+                .withClient(client)
+                .build()
+
+        owner.confirm(operationScore10)
+        owner.confirm(operationScore5)
+
+        assertEquals(owner.score, 15)
+        assertEquals(client.score, 15)
+        assertEquals(owner.successfulOperation, 2)
+        assertEquals(client.successfulOperation, 2)
     }
 
 }

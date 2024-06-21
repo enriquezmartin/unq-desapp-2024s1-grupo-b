@@ -1,10 +1,12 @@
 package ar.unq.desapp.grupob.backenddesappapi.utils
 
-data class ApiNotResponding(override val message: String?= "API is not responding"): RuntimeException(message)
+class ApiNotResponding(): RuntimeException("API is not responding")
 
 data class UsernameAlreadyTakenException(override val message: String): RuntimeException(message)
 data class UserCannotBeRegisteredException(override val message: String): RuntimeException(message)
 data class UserNotRegisteredException(override val message: String): RuntimeException(message)
-data class PriceOutOfRangeException(override val message: String? = "The price is out of range"): RuntimeException(message)
-data class UnavailablePostException(override val message: String? = "The post is not available"): RuntimeException(message)
-data class InvalidUserForPaymentException(override val message: String? = "The client cannot be the same as the post owner"): RuntimeException(message)
+class PriceOutOfRangeException(): RuntimeException("The price is out of range")
+class UnavailablePostException(): RuntimeException( "The post is not available")
+class InvalidUserForPaymentException(): RuntimeException("The client cannot be the same as the post owner")
+class InvalidUserToConfirmException(): RuntimeException("Only the owner can confirm this operation.")
+class InvalidOperationException(): RuntimeException("Operation with status confirmed or cancelled can not be confirmed.")
