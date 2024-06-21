@@ -2,7 +2,6 @@ package ar.unq.desapp.grupob.backenddesappapi.model
 
 import ar.unq.desapp.grupob.backenddesappapi.utils.*
 import jakarta.persistence.*
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
@@ -29,9 +28,21 @@ class CryptoOperation(){
     }
 
     fun confirm(idRequester: Long) {
-        if(idRequester != post!!.owner!!.id!!) throw InvalidUserToConfirmException()
+        if(idRequester != post!!.owner!!.id!!) throw InvalidUserOperationException()
         if(status != OperationStatus.IN_PROGRESS) throw InvalidOperationException()
         status = OperationStatus.CLOSED
+        post!!.status = PostStatus.CLOSED
+    }
+
+    fun cancel(id: Long) {
+        val clientId = client!!.id
+        val ownerId = post!!.owner!!.id
+
+        if(status != OperationStatus.IN_PROGRESS) throw InvalidOperationException()
+        if(id != clientId && id != ownerId ) throw InvalidUserOperationException()
+
+        status = OperationStatus.CANCELLED
+        post!!.status = PostStatus.ACTIVE
     }
 
 

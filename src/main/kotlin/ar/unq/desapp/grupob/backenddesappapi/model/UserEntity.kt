@@ -2,8 +2,10 @@ package ar.unq.desapp.grupob.backenddesappapi.model
 
 import ar.unq.desapp.grupob.backenddesappapi.utils.UserValidator
 import jakarta.persistence.*
+import java.lang.Integer.max
 import java.time.Duration
 import java.time.LocalDateTime
+import kotlin.math.min
 
 @Entity
 @Table(name = "users")
@@ -70,6 +72,13 @@ class UserEntity(){
     private fun isWithinMinutes(dateTime1: LocalDateTime, dateTime2: LocalDateTime, minutes: Int): Boolean {
         val duration = Duration.between(dateTime1, dateTime2).abs()
         return duration.toMinutes() <= minutes
+    }
+
+    fun cancel(operation: CryptoOperation): CryptoOperation {
+        operation.cancel(id!!)
+        val newScore = max(0, score - 20)
+        score = newScore
+        return operation
     }
 
 }

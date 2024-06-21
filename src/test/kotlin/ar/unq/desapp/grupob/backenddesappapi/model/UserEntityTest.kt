@@ -4,11 +4,12 @@ import ar.unq.desapp.grupob.backenddesappapi.helpers.OperationBuilder
 import ar.unq.desapp.grupob.backenddesappapi.helpers.PostBuilder
 import ar.unq.desapp.grupob.backenddesappapi.helpers.UserBuilder
 import ar.unq.desapp.grupob.backenddesappapi.utils.InvalidOperationException
-import ar.unq.desapp.grupob.backenddesappapi.utils.InvalidUserToConfirmException
+import ar.unq.desapp.grupob.backenddesappapi.utils.InvalidUserOperationException
 import ar.unq.desapp.grupob.backenddesappapi.utils.UserCannotBeRegisteredException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.springframework.security.core.userdetails.User
 import java.time.LocalDateTime
 
 private const val A_VALID_NAME = "a valid name"
@@ -17,7 +18,8 @@ private const val A_VALID_EMAIL = "valid@asd.com"
 private const val A_VALID_ADDRESS = "a valid address"
 private const val A_VALID_PASSWORD = "Pass*Word"
 
-private const val STATUS_OPERATION_ERROR = "Operation with status confirmed or cancelled can not be confirmed."
+private const val STATUS_OPERATION_ERROR = "Operation with status closed or cancelled can not be confirmed or canceled."
+private const val INVALID_USER_ERROR = "Invalid user to confirm o cancel this operation"
 
 class UserEntityTest {
     @Test
@@ -168,9 +170,9 @@ class UserEntityTest {
                 .withStatus(OperationStatus.IN_PROGRESS)
                 .withPost(post)
                 .build()
-        val errorMsg = assertThrows<InvalidUserToConfirmException> { owner.confirm(operation) }.message
+        val errorMsg = assertThrows<InvalidUserOperationException> { owner.confirm(operation) }.message
 
-        assertEquals("Only the owner can confirm this operation.", errorMsg)
+        assertEquals(INVALID_USER_ERROR, errorMsg)
     }
 
     @Test
@@ -203,7 +205,7 @@ class UserEntityTest {
 
 
     @Test
-    fun `confirm operation`(){
+    fun `when the operation is confirmed within 30 minutes, the users involved add 10 points to the score and 1 successful operation`(){
         var client: UserEntity = UserBuilder().withId(1L).withSuccesfulOperations(0).build()
         var owner: UserEntity = UserBuilder().withId(2L).withScore(0).withSuccesfulOperations(0).build()
         var post = PostBuilder()
@@ -218,7 +220,24 @@ class UserEntityTest {
                 .withClient(client)
                 .build()
 
-        val operationScore5 =
+
+        owner.confirm(operationScore10)
+
+        assertEquals(owner.score, 10)
+        assertEquals(client.score, 10)
+        assertEquals(owner.successfulOperation, 1)
+        assertEquals(client.successfulOperation, 1)
+    }
+
+    @Test
+    fun `when the operation is confirmed within 30 minutes, the users involved add 5 points to the score`(){
+        var client: UserEntity = UserBuilder().withId(1L).withSuccesfulOperations(0).build()
+        var owner: UserEntity = UserBuilder().withId(2L).withScore(0).withSuccesfulOperations(0).build()
+        var post = PostBuilder()
+            .withStatus(PostStatus.IN_PROGRESS)
+            .withUser(owner)
+            .build()
+        val operationScore10 =
             OperationBuilder()
                 .withDateTime(LocalDateTime.now().minusDays(1))
                 .withStatus(OperationStatus.IN_PROGRESS)
@@ -227,12 +246,95 @@ class UserEntityTest {
                 .build()
 
         owner.confirm(operationScore10)
-        owner.confirm(operationScore5)
 
-        assertEquals(owner.score, 15)
-        assertEquals(client.score, 15)
-        assertEquals(owner.successfulOperation, 2)
-        assertEquals(client.successfulOperation, 2)
+        assertEquals(owner.score, 5)
+        assertEquals(client.score, 5)
+    }
+
+    @Test
+    fun `when a user cancel an operation with a status different from in progress, an exception is raised`(){
+        var client: UserEntity = UserBuilder().withId(1L).build()
+        var owner: UserEntity = UserBuilder().withId(2L).build()
+        var post = PostBuilder()
+            .withUser(owner)
+            .build()
+        val canceledOperation =
+            OperationBuilder()
+                .withStatus(OperationStatus.CANCELLED)
+                .withPost(post)
+                .withClient(client)
+                .build()
+        val closedOperation =
+            OperationBuilder()
+                .withStatus(OperationStatus.CLOSED)
+                .withPost(post)
+                .withClient(client)
+                .build()
+
+        val closedErrorMsg = assertThrows<InvalidOperationException> { owner.cancel(closedOperation) }.message
+        val cancelledErrorMsg = assertThrows<InvalidOperationException> { owner.cancel(canceledOperation) }.message
+
+        assertEquals(closedErrorMsg, STATUS_OPERATION_ERROR)
+        assertEquals(cancelledErrorMsg, STATUS_OPERATION_ERROR)
+    }
+    @Test
+    fun `a non related user to the operation cannot cancel it`(){
+        var client: UserEntity = UserBuilder().withId(1L).build()
+        var owner: UserEntity = UserBuilder().withId(2L).build()
+        var nonRelatedUser: UserEntity = UserBuilder().withId(3L).build()
+        var post = PostBuilder()
+            .withUser(owner)
+            .build()
+        val operation =
+            OperationBuilder()
+                .withStatus(OperationStatus.IN_PROGRESS)
+                .withPost(post)
+                .withClient(client)
+                .build()
+
+        val errorMsg = assertThrows<InvalidUserOperationException> { nonRelatedUser.cancel(operation) }.message
+
+        assertEquals(errorMsg, INVALID_USER_ERROR)
+    }
+
+    @Test
+    fun `when a client user cancel an operation reduce his score by 20`(){
+        var client: UserEntity = UserBuilder().withId(1L).withScore(20).build()
+        var owner: UserEntity = UserBuilder().withId(2L).build()
+        var post = PostBuilder()
+            .withUser(owner)
+            .build()
+        val operation =
+            OperationBuilder()
+                .withStatus(OperationStatus.IN_PROGRESS)
+                .withPost(post)
+                .withClient(client)
+                .build()
+
+        client.cancel(operation)
+
+        assertEquals(client.score, 0)
+        assertEquals(operation.status, OperationStatus.CANCELLED)
+    }
+
+    @Test
+    fun `when a owner user cancel an operation reduce his score by 20`(){
+        var client: UserEntity = UserBuilder().withId(1L).build()
+        var owner: UserEntity = UserBuilder().withId(2L).withScore(20).build()
+        var post = PostBuilder()
+            .withUser(owner)
+            .build()
+        val operation =
+            OperationBuilder()
+                .withStatus(OperationStatus.IN_PROGRESS)
+                .withPost(post)
+                .withClient(client)
+                .build()
+
+        owner.cancel(operation)
+
+        assertEquals(owner.score, 0)
+        assertEquals(operation.status, OperationStatus.CANCELLED)
     }
 
 }
