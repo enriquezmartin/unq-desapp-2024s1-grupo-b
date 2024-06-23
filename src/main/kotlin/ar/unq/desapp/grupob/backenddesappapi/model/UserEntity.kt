@@ -1,5 +1,6 @@
 package ar.unq.desapp.grupob.backenddesappapi.model
 
+import ar.unq.desapp.grupob.backenddesappapi.utils.UnavailablePostException
 import ar.unq.desapp.grupob.backenddesappapi.utils.UserValidator
 import jakarta.persistence.*
 import java.time.Duration
@@ -78,5 +79,4 @@ class UserEntity(){
         val duration = Duration.between(dateTime1, dateTime2).abs()
         return duration.toMinutes() <= minutes
     }
-
 }

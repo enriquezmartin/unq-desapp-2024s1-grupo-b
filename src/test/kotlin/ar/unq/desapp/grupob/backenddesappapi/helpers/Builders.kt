@@ -6,15 +6,17 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 class OperationBuilder(){
-    private var id: Long? = 1L
+    private var id: Long? = null
     private var dateTime: LocalDateTime = LocalDateTime.now()
     private var status: OperationStatus = OperationStatus.CANCELLED
     private var post: Post? = null
     private var client: UserEntity? = null
 
     fun build(): CryptoOperation{
-        val operation = CryptoOperation(dateTime, status, post!!, client!!)
+        val operation = CryptoOperation(post!!, client!!)
         operation.id = id!!
+        operation.status = status
+        operation.dateTime = dateTime
         return operation
     }
     fun withId(id: Long): OperationBuilder {
@@ -39,14 +41,15 @@ class OperationBuilder(){
     }
 }
 class PriceBuilder(){
-    private var id: Long? = 1L
+    private var id: Long? = null
     private var cryptoCurrency: CryptoCurrency = CryptoCurrency.ALICEUSDT
     private var priceTime: LocalDateTime = LocalDateTime.now()
     private var value: Float = 10F
 
     fun build(): Price {
-        val price = Price(cryptoCurrency, value, priceTime)
-        price.id
+        val price = Price(cryptoCurrency, value)
+        price.id = id
+        price.priceTime = priceTime
         return price
     }
     fun withId(id: Long): PriceBuilder{
@@ -69,7 +72,7 @@ class PriceBuilder(){
 }
 
 class PostBuilder(){
-    private var id: Long? = 1L
+    private var id: Long? = null
     private var cryptoCurrency: CryptoCurrency = CryptoCurrency.ALICEUSDT
     private var amount: Float = 1F
     private var price: Float = 10F
@@ -129,7 +132,7 @@ class PostBuilder(){
 
 class UserBuilder(){
 
-    private var id: Long? = 1L
+    private var id: Long? = null
     private var name: String? = "a valid name"
     private var address: String? = "a valid address"
     private var surname: String? = "valid surname"

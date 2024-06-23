@@ -11,7 +11,7 @@ class Price(){
     var id: Long? = null
     @Enumerated(EnumType.STRING)
     var cryptoCurrency: CryptoCurrency? = null
-    var priceTime: LocalDateTime? = null
+    var priceTime: LocalDateTime = LocalDateTime.now()
     @Column(name = "crypto_value") //value es palabra reservada de H2SQL
     var value: Float? = null
 
@@ -21,9 +21,4 @@ class Price(){
         this.priceTime = LocalDateTime.now()
     }
 
-    constructor(cryptoCurrency: CryptoCurrency, value: Float, priceTime: LocalDateTime): this(){
-        this.cryptoCurrency = cryptoCurrency
-        this.value = value
-        this.priceTime = priceTime
-    }
 }

@@ -46,8 +46,8 @@ class CryptoOperationServiceTest {
 
     @Test
     fun `Payout notification success`(){
-        var client = UserBuilder().build()
-        var post = PostBuilder().build()
+        var client = UserBuilder().withId(1L).build()
+        var post = PostBuilder().withId(1L).build()
         `when`(userRepository.findById(client.id!!)).thenReturn(Optional.of(client))
         `when`(postRepository.findById(post.id!!)).thenReturn(Optional.of(post))
 
@@ -61,8 +61,9 @@ class CryptoOperationServiceTest {
 
     @Test
     fun `when price is out of range for a post in payout notification the post become cancelled`(){
-        var client = UserBuilder().build()
+        var client = UserBuilder().withId(1L).build()
         var post = PostBuilder()
+            .withId(1L)
             .withOperationType(OperationType.PURCHASE)
             .withCryptoCurrency(CryptoCurrency.AAVEUSDT)
             .withPrice(10F)
@@ -84,6 +85,7 @@ class CryptoOperationServiceTest {
     @Test
     fun `confirm`(){
         var owner = UserBuilder()
+            .withId(1L)
             .build()
         var client = UserBuilder()
             .build()
@@ -94,6 +96,7 @@ class CryptoOperationServiceTest {
             .withStatus(OperationStatus.IN_PROGRESS)
             .withPost(post)
             .withClient(client)
+            .withId(1L)
             .build()
 
         `when`(cryptoOperationRepository.findById(operation.id!!)).thenReturn(Optional.of(operation))

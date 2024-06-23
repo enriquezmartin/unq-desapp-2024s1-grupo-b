@@ -31,6 +31,7 @@ val openapiVersion = "2.3.0"
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-aop")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("mysql:mysql-connector-java:${mySqlVersion}")
@@ -40,8 +41,10 @@ dependencies {
 	implementation("io.jsonwebtoken:jjwt-root:${jsonWebTokenVersion}")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${openapiVersion}")
 	implementation("javax.validation:validation-api:${validationApiVersion}")
-	implementation ("org.springframework.boot:spring-boot-starter-actuator")
-	implementation ("io.micrometer:micrometer-registry-prometheus")
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	implementation("io.micrometer:micrometer-registry-prometheus")
+	implementation("org.springframework.boot:spring-boot-starter-cache")
+	implementation("com.github.ben-manes.caffeine:caffeine")
 
 	testImplementation("org.mockito:mockito-core:${mockitoVersion}")
 	testImplementation("org.springframework.security:spring-security-test")

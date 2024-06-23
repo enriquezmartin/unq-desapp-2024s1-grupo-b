@@ -41,7 +41,7 @@ class CryptoOperationServiceImpl: CryptoOperationService {
             status = OperationStatus.IN_PROGRESS
         }
 
-        var operation: CryptoOperation = CryptoOperation(LocalDateTime.now(), status, post, user)
+        var operation: CryptoOperation = CryptoOperation(post, user)
         operationRepository.save(operation)
         return operation
     }
