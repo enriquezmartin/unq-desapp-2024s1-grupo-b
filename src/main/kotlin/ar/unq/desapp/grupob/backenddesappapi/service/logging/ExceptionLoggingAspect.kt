@@ -12,6 +12,7 @@ class ExceptionLoggingAspect {
     private val logger = LoggerFactory.getLogger(this.javaClass)
     @Pointcut("execution(* ar.unq.desapp.grupob.backenddesappapi.controller..*(..))")
     fun controllerMethodPointcut() {
+        //should be empty
     }
 
     @AfterThrowing(pointcut = "controllerMethodPointcut()", throwing = "e")

@@ -1,6 +1,5 @@
 package ar.unq.desapp.grupob.backenddesappapi.dtos
 
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class ResponsePostDTO(

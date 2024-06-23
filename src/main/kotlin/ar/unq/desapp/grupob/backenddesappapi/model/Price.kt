@@ -1,7 +1,6 @@
 package ar.unq.desapp.grupob.backenddesappapi.model
 
 import jakarta.persistence.*
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Entity

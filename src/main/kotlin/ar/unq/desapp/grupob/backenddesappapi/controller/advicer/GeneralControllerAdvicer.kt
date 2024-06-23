@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 @ControllerAdvice
 class GeneralControllerAdvicer {
 
-    val LOGGER = LoggerFactory.getLogger(this.javaClass)
+    val logger = LoggerFactory.getLogger(this.javaClass)
 
     @ExceptionHandler(UsernameAlreadyTakenException::class)
     fun handleRunTimeException(e: RuntimeException): ResponseEntity<String> {
@@ -36,7 +36,7 @@ class GeneralControllerAdvicer {
         return this.error(FORBIDDEN, e)
     }
     protected fun error(status: HttpStatus, e: RuntimeException): ResponseEntity<String> {
-        LOGGER.error(e.message)
+        logger.error(e.message)
         return ResponseEntity.status(status).body(e.message)
     }
 }

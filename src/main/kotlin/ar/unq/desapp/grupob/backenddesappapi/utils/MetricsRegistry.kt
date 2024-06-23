@@ -5,7 +5,7 @@ import io.micrometer.core.instrument.MeterRegistry
 import org.springframework.stereotype.Component
 
 @Component
-class MetricsRegistry(private val meterRegistry: MeterRegistry) {
+class MetricsRegistry(meterRegistry: MeterRegistry) {
 
     val loginAttemptsCounter: Counter = meterRegistry.counter("login_attempts_total")
 }

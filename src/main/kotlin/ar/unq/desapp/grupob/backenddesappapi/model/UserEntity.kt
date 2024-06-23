@@ -1,10 +1,8 @@
 package ar.unq.desapp.grupob.backenddesappapi.model
 
-import ar.unq.desapp.grupob.backenddesappapi.utils.UnavailablePostException
 import ar.unq.desapp.grupob.backenddesappapi.utils.UserValidator
 import jakarta.persistence.*
 import java.time.Duration
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Entity

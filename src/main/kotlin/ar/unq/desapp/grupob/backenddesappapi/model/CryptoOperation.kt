@@ -4,7 +4,6 @@ import ar.unq.desapp.grupob.backenddesappapi.utils.InvalidUserForPaymentExceptio
 import ar.unq.desapp.grupob.backenddesappapi.utils.PriceOutOfRangeException
 import ar.unq.desapp.grupob.backenddesappapi.utils.UnavailablePostException
 import jakarta.persistence.*
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
