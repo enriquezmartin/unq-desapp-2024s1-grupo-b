@@ -23,9 +23,9 @@ class PostRepositoryTest {
 
     @Test
     fun `get posts by status`(){
-        val activePost = PostBuilder().withId(1L).withStatus(PostStatus.ACTIVE).build()
-        val inactivePost = PostBuilder().withId(2L).withStatus(PostStatus.CLOSED).build()
-        val inProgressPost = PostBuilder().withId(3L).withStatus(PostStatus.IN_PROGRESS).build()
+        val activePost = PostBuilder().withStatus(PostStatus.ACTIVE).build()
+        val inactivePost = PostBuilder().withStatus(PostStatus.CLOSED).build()
+        val inProgressPost = PostBuilder().withStatus(PostStatus.IN_PROGRESS).build()
         val posts: List<Post> = listOf(activePost, inactivePost, inProgressPost)
         postRepository.saveAll(posts)
 

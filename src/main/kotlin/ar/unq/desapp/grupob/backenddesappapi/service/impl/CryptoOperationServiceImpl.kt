@@ -1,5 +1,7 @@
 package ar.unq.desapp.grupob.backenddesappapi.service.impl
 
+import ar.unq.desapp.grupob.backenddesappapi.dtos.OperationReportDTO
+import ar.unq.desapp.grupob.backenddesappapi.dtos.ReportDTO
 import ar.unq.desapp.grupob.backenddesappapi.model.*
 import ar.unq.desapp.grupob.backenddesappapi.repository.CryptoOperationRepository
 import ar.unq.desapp.grupob.backenddesappapi.repository.PostRepository
@@ -50,5 +52,26 @@ class CryptoOperationServiceImpl: CryptoOperationService {
         var operation: CryptoOperation = operationRepository.findById(operationId).get()
         operation = user.cancel(operation)
         return operation
+    }
+
+    override fun getReport(userId: Long, startDate: LocalDateTime, endDate: LocalDateTime): ReportDTO {
+        val operations = operationRepository.getByOwnerBetweenDates(userId, startDate, endDate)
+        val dollarPrice = priceRepository.findFirstByCryptoCurrencyOrderByPriceTimeDesc(CryptoCurrency.USDAR)
+        val actives = mutableListOf<OperationReportDTO>()
+        var totalInDollars = 0f
+        var totalInArs = 0f
+        operations.forEach {
+            val priceInArs = it.post!!.price!! * dollarPrice.value!!
+            val active = OperationReportDTO(
+                it.post!!.cryptoCurrency!!,
+                it.post!!.amount!!,
+                it.post!!.price!!,
+                priceInArs
+            )
+            actives.add(active)
+            totalInDollars += it.post!!.price!!
+            totalInArs += priceInArs
+        }
+        return ReportDTO(LocalDateTime.now(), totalInDollars, totalInArs, actives)
     }
 }

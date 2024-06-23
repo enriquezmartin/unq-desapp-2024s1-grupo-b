@@ -1,6 +1,7 @@
 package ar.unq.desapp.grupob.backenddesappapi.controller
 
 import ar.unq.desapp.grupob.backenddesappapi.dtos.OperationDTO
+import ar.unq.desapp.grupob.backenddesappapi.dtos.ReportDTO
 import ar.unq.desapp.grupob.backenddesappapi.model.CryptoOperation
 import ar.unq.desapp.grupob.backenddesappapi.model.OperationType
 import ar.unq.desapp.grupob.backenddesappapi.model.Price
@@ -9,10 +10,9 @@ import ar.unq.desapp.grupob.backenddesappapi.service.CryptoOperationService
 import ar.unq.desapp.grupob.backenddesappapi.service.PriceService
 import ar.unq.desapp.grupob.backenddesappapi.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
+import java.time.LocalTime
 
 @RestController
 @RequestMapping("/operation")
@@ -59,6 +59,15 @@ class OperationController {
     fun cancel(@PathVariable userId: String, @PathVariable operationId: String): OperationDTO{
         val operation = operationService.cancelOperation(userId.toLong(), operationId.toLong())
         return buildOperationDTO(userId, operation)
+    }
+
+    @GetMapping("/{userId}")
+    fun getReport(@PathVariable userId: String,
+                  @RequestParam startDate: String,
+                  @RequestParam endDate: String):ReportDTO{
+        val start = LocalDate.parse(startDate).atStartOfDay()
+        val end = LocalDate.parse(endDate).atTime(LocalTime.MAX)
+        return operationService.getReport(userId.toLong(), start, end)
     }
 
     private fun buildOperationDTO(userId: String, operation: CryptoOperation): OperationDTO {

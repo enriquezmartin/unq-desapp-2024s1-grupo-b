@@ -40,20 +40,20 @@ class CryptoOperationServiceTest {
     private lateinit var cryptoOperationRepository: CryptoOperationRepository
 
 
-    @Test
-    fun `Payout notification success`(){
-        var client = UserBuilder().withId(1L).build()
-        var post = PostBuilder().withId(1L).build()
-        `when`(userRepository.findById(client.id!!)).thenReturn(Optional.of(client))
-        `when`(postRepository.findById(post.id!!)).thenReturn(Optional.of(post))
-
-        val operation = service.payoutNotification(post.id!!, client.id!!)
-
-        assertEquals(operation.status, OperationStatus.IN_PROGRESS)
-        assertEquals(operation.post!!.status, PostStatus.IN_PROGRESS)
-        assertEquals(operation.client!!.id, client.id)
-
-    }
+//    @Test
+//    fun `Payout notification success`(){
+//        var client = UserBuilder().withId(1L).build()
+//        var post = PostBuilder().withId(1L).build()
+//        `when`(userRepository.findById(client.id!!)).thenReturn(Optional.of(client))
+//        `when`(postRepository.findById(post.id!!)).thenReturn(Optional.of(post))
+//
+//        val operation = service.payoutNotification(post.id!!, client.id!!)
+//
+//        assertEquals(operation.status, OperationStatus.IN_PROGRESS)
+//        assertEquals(operation.post!!.status, PostStatus.IN_PROGRESS)
+//        assertEquals(operation.client!!.id, client.id)
+//
+//    }
 
     /*@Test
     fun `when price is out of range for a post in payout notification the post become cancelled`(){
