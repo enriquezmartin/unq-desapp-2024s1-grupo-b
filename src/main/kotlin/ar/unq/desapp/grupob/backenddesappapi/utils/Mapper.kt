@@ -1,13 +1,16 @@
 package ar.unq.desapp.grupob.backenddesappapi.utils
 
+import ar.unq.desapp.grupob.backenddesappapi.dtos.OperationDTO
 import ar.unq.desapp.grupob.backenddesappapi.dtos.PostDTO
 import ar.unq.desapp.grupob.backenddesappapi.dtos.ResponsePostDTO
 import ar.unq.desapp.grupob.backenddesappapi.dtos.UserDTO
 import ar.unq.desapp.grupob.backenddesappapi.model.CryptoCurrency
+import ar.unq.desapp.grupob.backenddesappapi.model.CryptoOperation
 import ar.unq.desapp.grupob.backenddesappapi.model.OperationType
 import ar.unq.desapp.grupob.backenddesappapi.model.Post
 
 object Mapper {
+
     fun fromDtoToPost(dto: PostDTO): Post {
         var post: Post = Post()
         post.price = dto.price

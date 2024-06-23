@@ -13,8 +13,8 @@ class OperationBuilder(){
     private var client: UserEntity? = null
 
     fun build(): CryptoOperation{
-        val operation = CryptoOperation(post!!, client!!)
-        operation.id = id!!
+        val operation = CryptoOperation(post!!, client)
+        operation.id = id
         operation.status = status
         operation.dateTime = dateTime
         return operation
@@ -141,11 +141,13 @@ class UserBuilder(){
     private var cvuMP: String? = "1234567890123456789012"
     private var walletAddress: String? = "12345678"
     private var score: Int = 0
-    private var succesfulOperations: Int = 0
+    private var successfulOperations: Int = 0
 
     fun build(): UserEntity{
         val user: UserEntity = UserEntity(email, password, name, surname, address, cvuMP, walletAddress)
         user.id = this.id
+        user.score = score
+        user.successfulOperation = successfulOperations
         return user
     }
 
@@ -195,7 +197,7 @@ class UserBuilder(){
     }
 
     fun withSuccesfulOperations(number: Int): UserBuilder{
-        this.succesfulOperations = number
+        this.successfulOperations = number
         return this
     }
 

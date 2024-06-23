@@ -1,5 +1,7 @@
 package ar.unq.desapp.grupob.backenddesappapi.service.impl
 
+import ar.unq.desapp.grupob.backenddesappapi.dtos.OperationReportDTO
+import ar.unq.desapp.grupob.backenddesappapi.dtos.ReportDTO
 import ar.unq.desapp.grupob.backenddesappapi.model.*
 import ar.unq.desapp.grupob.backenddesappapi.repository.CryptoOperationRepository
 import ar.unq.desapp.grupob.backenddesappapi.repository.PostRepository
@@ -25,36 +27,49 @@ class CryptoOperationServiceImpl: CryptoOperationService {
 
     @Autowired
     lateinit var operationRepository: CryptoOperationRepository
-    override fun payoutNotification(postId: Long, userId: Long): CryptoOperation {
+    override fun  payoutNotification(postId: Long, userId: Long): CryptoOperation {
         var post: Post = postRepository.findById(postId).get()
         var user: UserEntity = userRepository.findById(userId).get()
         var lastPrice: Price = priceRepository.findFirstByCryptoCurrencyOrderByPriceTimeDesc(post.cryptoCurrency!!)
-        var status: OperationStatus
-        if(post.operationType == OperationType.PURCHASE && post.price!! < lastPrice.value!!){
-            post.status = PostStatus.ACTIVE
-            status = OperationStatus.CANCELLED
-        }
-        else{
-            post.status = PostStatus.IN_PROGRESS
-            status = OperationStatus.IN_PROGRESS
-        }
 
-        var operation: CryptoOperation = CryptoOperation(post, user)
+        var operation = CryptoOperation.initOperation(post, lastPrice, user)
         operationRepository.save(operation)
+
         return operation
     }
 
-    override fun confirmOperation(ownerId: Long, operationId: Long): CryptoOperation {
-        var owner: UserEntity = userRepository.findById(ownerId).get()
+    override fun confirmOperation(userId: Long, operationId: Long): CryptoOperation {
+        var user: UserEntity = userRepository.findById(userId).get()
         var operation: CryptoOperation = operationRepository.findById(operationId).get()
-        var updatedOperation = owner.confirm(operation)
-        operationRepository.save(updatedOperation)
-        return updatedOperation
+        operation = user.confirm(operation)
+        return operation
     }
 
-//    private fun validateOwner(ownerId: Long, operation: CryptoOperation) {
-//        if(operation.post!!.owner!!.id != ownerId){
-//            throw Exception("")
-//        }
-//    }
+    override fun cancelOperation(userId: Long, operationId: Long): CryptoOperation {
+        var user: UserEntity = userRepository.findById(userId).get()
+        var operation: CryptoOperation = operationRepository.findById(operationId).get()
+        operation = user.cancel(operation)
+        return operation
+    }
+
+    override fun getReport(userId: Long, startDate: LocalDateTime, endDate: LocalDateTime): ReportDTO {
+        val operations = operationRepository.getByOwnerBetweenDates(userId, startDate, endDate)
+        val dollarPrice = priceRepository.findFirstByCryptoCurrencyOrderByPriceTimeDesc(CryptoCurrency.USDAR)
+        val actives = mutableListOf<OperationReportDTO>()
+        var totalInDollars = 0f
+        var totalInArs = 0f
+        operations.forEach {
+            val priceInArs = it.post!!.price!! * dollarPrice.value!!
+            val active = OperationReportDTO(
+                it.post!!.cryptoCurrency!!,
+                it.post!!.amount!!,
+                it.post!!.price!!,
+                priceInArs
+            )
+            actives.add(active)
+            totalInDollars += it.post!!.price!!
+            totalInArs += priceInArs
+        }
+        return ReportDTO(LocalDateTime.now(), totalInDollars, totalInArs, actives)
+    }
 }

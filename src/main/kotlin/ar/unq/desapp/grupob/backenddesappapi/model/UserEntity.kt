@@ -2,8 +2,10 @@ package ar.unq.desapp.grupob.backenddesappapi.model
 
 import ar.unq.desapp.grupob.backenddesappapi.utils.UserValidator
 import jakarta.persistence.*
+import java.lang.Integer.max
 import java.time.Duration
 import java.time.LocalDateTime
+import kotlin.math.min
 
 @Entity
 @Table(name = "users")
@@ -24,7 +26,7 @@ class UserEntity(){
     @Column(nullable = false, unique = true)
     var walletAddress: String? = null
 
-    var succesfulOperation: Int = 0
+    var successfulOperation: Int = 0
     var score: Int = 0
 
     @OneToMany(mappedBy = "owner", cascade = [CascadeType.MERGE], orphanRemoval = true)
@@ -56,20 +58,14 @@ class UserEntity(){
     }
 
     fun confirm(operation: CryptoOperation): CryptoOperation {
-        var score = 0
-        if(isWithinMinutes(LocalDateTime.now(), operation.dateTime, 30)){
-            score = 10
-        }
-        else{
-            score = 5
-        }
-        this.score = score
-        this.succesfulOperation ++
+        operation.confirm(id!!)
+        val score = if (isWithinMinutes(LocalDateTime.now(), operation.dateTime, 30)) 10 else 5
+        this.score += score
+        this.successfulOperation ++
 
-        operation.client!!.score = score
-        operation.client!!.succesfulOperation ++
-        operation.status = OperationStatus.CLOSED
-        operation.post!!.status = PostStatus.CLOSED
+        operation.client!!.score += score
+        operation.client!!.successfulOperation ++
+
         return operation
     }
 
@@ -77,4 +73,12 @@ class UserEntity(){
         val duration = Duration.between(dateTime1, dateTime2).abs()
         return duration.toMinutes() <= minutes
     }
+
+    fun cancel(operation: CryptoOperation): CryptoOperation {
+        operation.cancel(id!!)
+        val newScore = max(0, score - 20)
+        score = newScore
+        return operation
+    }
+
 }

@@ -19,13 +19,13 @@ class PostController {
     @Autowired
     lateinit var postService: PostService
     @Autowired
-    lateinit var dolarApiService: DolarApiService
+    lateinit var dollarApiService: DolarApiService
 
     @PostMapping("/post/{userId}")
     fun postIntent(@PathVariable userId: String, @RequestBody postDTO: PostDTO): ResponsePostDTO {
         val post: Post = Mapper.fromDtoToPost(postDTO)
         val createdPost = postService.intentPost(post, userId.toLong())
-        val dolarPriceInArs = dolarApiService.getDolarCryptoPrice()
+        val dolarPriceInArs = dollarApiService.getDolarCryptoPrice()
         var response = Mapper.fromPostToResponsePostDTO(createdPost)
         response.priceInArs = dolarPriceInArs!!.compra.toFloat() * createdPost.amount!!
         return response
@@ -34,7 +34,7 @@ class PostController {
     @GetMapping("/activePosts")
     fun getActivePosts(): List<ResponsePostDTO> {
         val posts = postService.getActivePost()
-        val dolarPriceInArs = dolarApiService.getDolarCryptoPrice()
+        val dolarPriceInArs = dollarApiService.getDolarCryptoPrice()
         return posts.map {
             var dto = Mapper.fromPostToResponsePostDTO(it)
             dto.priceInArs = dolarPriceInArs!!.compra.toFloat() * it.amount!!

@@ -1,8 +1,6 @@
 package ar.unq.desapp.grupob.backenddesappapi.model
 
-import ar.unq.desapp.grupob.backenddesappapi.utils.InvalidUserForPaymentException
-import ar.unq.desapp.grupob.backenddesappapi.utils.PriceOutOfRangeException
-import ar.unq.desapp.grupob.backenddesappapi.utils.UnavailablePostException
+import ar.unq.desapp.grupob.backenddesappapi.utils.*
 import jakarta.persistence.*
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
@@ -24,10 +22,29 @@ class CryptoOperation(){
     @JoinColumn(name = "user_id")
     var client: UserEntity? = null
 
-    constructor(post: Post, userEntity: UserEntity): this(){
+    constructor(post: Post, userEntity: UserEntity?): this(){
         this.post = post
         this.client = userEntity
     }
+
+    fun confirm(idRequester: Long) {
+        if(idRequester != post!!.owner!!.id!!) throw InvalidUserOperationException()
+        if(status != OperationStatus.IN_PROGRESS) throw InvalidOperationException()
+        status = OperationStatus.CLOSED
+        post!!.status = PostStatus.CLOSED
+    }
+
+    fun cancel(id: Long) {
+        val clientId = client!!.id
+        val ownerId = post!!.owner!!.id
+
+        if(status != OperationStatus.IN_PROGRESS) throw InvalidOperationException()
+        if(id != clientId && id != ownerId ) throw InvalidUserOperationException()
+
+        status = OperationStatus.CANCELLED
+        post!!.status = PostStatus.ACTIVE
+    }
+
 
     companion object {
         fun initOperation(post: Post, price: Price, user: UserEntity): CryptoOperation {
@@ -52,7 +69,7 @@ class CryptoOperation(){
             when(post.operationType) {
                 OperationType.PURCHASE -> if(post.price!!  < price.value!! * 0.95) throw PriceOutOfRangeException()
                 OperationType.SALE     -> if(price.value!! < post.price!!  * 0.95) throw PriceOutOfRangeException()
-                else -> throw Exception("")
+                else -> return 
             }
         }
     }
