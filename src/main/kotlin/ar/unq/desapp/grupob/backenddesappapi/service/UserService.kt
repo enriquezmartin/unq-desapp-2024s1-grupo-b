@@ -5,4 +5,5 @@ import org.springframework.security.core.userdetails.UserDetailsService
 
 interface UserService: UserDetailsService {
     fun findUserByEmail(email: String): UserEntity?
+    fun findUserBYId(id: Long): UserEntity
 }

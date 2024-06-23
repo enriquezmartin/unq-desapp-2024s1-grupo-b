@@ -20,6 +20,10 @@ class UserServiceImpl : UserService {
         return userDao.findByEmail(email)
     }
 
+    override fun findUserBYId(id: Long): UserEntity {
+        return userDao.findById(id).get()
+    }
+
     override fun loadUserByUsername(username: String?): UserDetails {
         val userdetails: UserEntity = userDao.findByEmail(username!!)
             ?: throw UsernameNotFoundException("El usuario no existe")

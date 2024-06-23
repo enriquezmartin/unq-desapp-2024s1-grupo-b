@@ -8,4 +8,5 @@ interface PriceService {
     fun getAllPrices(): List<Price>
     fun getPrices(cryptoCurrency: CryptoCurrency): List<Price>
     fun getLatestPrices(cryptoCurrency: CryptoCurrency): List<Price>
+    fun getLastPrice(cryptoCurrency: CryptoCurrency): Price
 }

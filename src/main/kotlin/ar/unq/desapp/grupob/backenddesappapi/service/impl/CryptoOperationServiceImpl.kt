@@ -27,36 +27,28 @@ class CryptoOperationServiceImpl: CryptoOperationService {
 
     @Autowired
     lateinit var operationRepository: CryptoOperationRepository
-    override fun payoutNotification(postId: Long, userId: Long): CryptoOperation {
+    override fun  payoutNotification(postId: Long, userId: Long): CryptoOperation {
         var post: Post = postRepository.findById(postId).get()
         var user: UserEntity = userRepository.findById(userId).get()
         var lastPrice: Price = priceRepository.findFirstByCryptoCurrencyOrderByPriceTimeDesc(post.cryptoCurrency!!)
-        var status: OperationStatus
-        if(post.operationType == OperationType.PURCHASE && post.price!! < lastPrice.value!!){
-            post.status = PostStatus.ACTIVE
-            status = OperationStatus.CANCELLED
-        }
-        else{
-            post.status = PostStatus.IN_PROGRESS
-            status = OperationStatus.IN_PROGRESS
-        }
 
-        var operation: CryptoOperation = CryptoOperation(post, user)
+        var operation = CryptoOperation.initOperation(post, lastPrice, user)
         operationRepository.save(operation)
+
         return operation
     }
 
-    override fun confirmOperation(ownerId: Long, operationId: Long): CryptoOperation {
-        var owner: UserEntity = userRepository.findById(ownerId).get()
+    override fun confirmOperation(userId: Long, operationId: Long): CryptoOperation {
+        var user: UserEntity = userRepository.findById(userId).get()
         var operation: CryptoOperation = operationRepository.findById(operationId).get()
-        var updatedOperation = owner.confirm(operation)
-        operationRepository.save(updatedOperation)
-        return updatedOperation
+        operation = user.confirm(operation)
+        return operation
     }
 
-//    private fun validateOwner(ownerId: Long, operation: CryptoOperation) {
-//        if(operation.post!!.owner!!.id != ownerId){
-//            throw Exception("")
-//        }
-//    }
+    override fun cancelOperation(userId: Long, operationId: Long): CryptoOperation {
+        var user: UserEntity = userRepository.findById(userId).get()
+        var operation: CryptoOperation = operationRepository.findById(operationId).get()
+        operation = user.cancel(operation)
+        return operation
+    }
 }

@@ -43,4 +43,8 @@ class PriceServiceImpl : PriceService{
     override fun getLatestPrices(cryptoCurrency: CryptoCurrency): List<Price> {
         return priceRepository.findByCryptoCurrencyAndPriceTimeAfter(cryptoCurrency)
     }
+
+    override fun getLastPrice(cryptoCurrency: CryptoCurrency): Price {
+        return priceRepository.findFirstByCryptoCurrencyOrderByPriceTimeDesc(cryptoCurrency)
+    }
 }
