@@ -42,6 +42,11 @@ class ArchTest {
     @Test
     fun controllerClassesShouldEndWithController(){
         classes().that().resideInAPackage("..controller")
+            .and(object : DescribedPredicate<JavaClass>("are not Kotlin generated classes") {
+                override fun test(javaClass: JavaClass): Boolean {
+                    return !javaClass.fullName.contains("$")
+                }
+            })
             .should().haveSimpleNameEndingWith("Controller")
             .check(baseClasses)
     }
@@ -61,6 +66,11 @@ class ArchTest {
     @Test
     fun controllerClassesShouldHaveSpringControllerAnnotation(){
         classes().that().resideInAPackage("..controller")
+            .and(object : DescribedPredicate<JavaClass>("are not Kotlin generated classes") {
+                override fun test(javaClass: JavaClass): Boolean {
+                    return !javaClass.fullName.contains("$")
+                }
+            })
             .should().beAnnotatedWith("org.springframework.web.bind.annotation.RestController")
             .check(baseClasses)
     }
