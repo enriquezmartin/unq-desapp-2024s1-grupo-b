@@ -49,6 +49,7 @@ dependencies {
 	testImplementation("org.mockito:mockito-core:${mockitoVersion}")
 	testImplementation("org.springframework.security:spring-security-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("com.tngtech.archunit:archunit:1.3.0")
 
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
