@@ -1,11 +1,14 @@
 package ar.unq.desapp.grupob.backenddesappapi.service
 
+import ar.unq.desapp.grupob.backenddesappapi.dtos.LoginDTO
 import ar.unq.desapp.grupob.backenddesappapi.helpers.UserBuilder
 import ar.unq.desapp.grupob.backenddesappapi.repository.UserRepository
 import ar.unq.desapp.grupob.backenddesappapi.utils.UsernameAlreadyTakenException
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito.`when`
@@ -13,9 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.util.*
+import javax.xml.crypto.Data
 
 @ExtendWith(SpringExtension :: class)
 @SpringBootTest
@@ -35,6 +40,19 @@ class UserServiceTest {
     fun <T> Optional<T>.toNullable(): T? = orElse(null)
 
     @Test
+    fun `test register valid user does not throw any exceptions`(){
+        val user = UserBuilder()
+            .withId(1L)
+            .withEmail("email@valid.com")
+            .withPassword("@V@lidPassw0rd")
+            .build()
+        `when`(userDao.save(user)).thenReturn(user)
+        assertDoesNotThrow{
+            authService.register(user)
+        }
+    }
+
+    @Test
     fun `when DataIntegrityViolationException is raised in a register method an UsernameAlreadyTaken exception is raised`(){
         val user = UserBuilder()
             .withEmail("email@valid.com")
@@ -47,7 +65,7 @@ class UserServiceTest {
     }
 
     @Test
-    fun `test find user by id`(){
+    fun `test find user by id when valid`(){
         val user = UserBuilder()
             .withId(2L)
             .build()
@@ -57,7 +75,7 @@ class UserServiceTest {
     }
 
     @Test
-    fun `test find user by username when valid`(){
+    fun `test find user by email when valid`(){
         val user = UserBuilder()
             .withEmail("email@valid.com")
             .build()
@@ -67,7 +85,7 @@ class UserServiceTest {
     }
 
     @Test
-    fun `test find user by username when invalid`(){
+    fun `test find user by email when invalid throws an exception`(){
         val user = UserBuilder()
             .withEmail("email@valid.com")
             .build()
@@ -78,4 +96,38 @@ class UserServiceTest {
         }
         assertEquals("User with email email@not_valid.com does not exist.", exception.message)
     }
+
+    @Test
+    fun `test login user when invalid throws an exception`(){
+        val badlogin = LoginDTO(
+            "email@not_valid.com",
+            "@doesNotExist"
+        )
+        val exception = assertThrows<BadCredentialsException>{
+            authService.login(badlogin)
+        }
+        assertEquals("Bad credentials", exception.message)
+    }
+
+    @Test
+    fun `test login user when valid`(){
+        val user = UserBuilder()
+            .withId(1L)
+            .withEmail("email@valid.com")
+            .withPassword("@V@lidPassw0rd")
+            .build()
+        `when`(userDao.save(user)).thenReturn(user)
+        `when`(userDao.findByEmail(user.email!!)).thenReturn(user)
+
+        val validLogin = LoginDTO(
+            user.email!!,
+            user.password!!
+        )
+        authService.register(user)
+        assertDoesNotThrow { authService.login(validLogin) }
+    }
+
+
+
+
 }
