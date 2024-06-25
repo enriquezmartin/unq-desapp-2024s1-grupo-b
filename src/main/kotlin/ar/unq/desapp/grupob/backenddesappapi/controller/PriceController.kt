@@ -27,13 +27,4 @@ class PriceController {
     fun getLatestPrices(@PathVariable crypto: String): List<Price> {
         return priceService.getLatestPrices(CryptoCurrency.valueOf(crypto))
     }
-    @PostMapping("/updatePrices")
-    fun updatePrices(): String{
-        try{
-            priceService.updatePrices()
-            return "Prices updated successfully"
-        } catch (e: Exception){
-            return "Prices update failed"
-        }
-    }
 }
