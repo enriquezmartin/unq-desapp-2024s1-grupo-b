@@ -9,6 +9,7 @@ import ar.unq.desapp.grupob.backenddesappapi.utils.Mapper
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.media.Content
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -30,7 +31,9 @@ class PostController {
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Intent posted successfully"),
-            ApiResponse(responseCode = "403", description = "User not logged in or doesn't have permissions")
+            ApiResponse(responseCode = "403",
+                description = "User not logged in or doesn't have permissions",
+                content= [Content()])
         ]
     )
     @PostMapping("/post/{userId}")
@@ -49,7 +52,10 @@ class PostController {
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Posts were retrieved successfully"),
-            ApiResponse(responseCode = "403", description = "User not logged in or doesn't have permissions"),
+            ApiResponse(    responseCode = "403",
+                            description = "User not logged in or doesn't have permissions",
+                            content= [Content()]
+                        )
         ]
     )
     @GetMapping("/activePosts")
