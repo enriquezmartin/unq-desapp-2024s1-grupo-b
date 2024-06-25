@@ -30,7 +30,7 @@ class SecurityConfig {
             .headers { header -> header.frameOptions { it.disable() }}
             .authorizeHttpRequests {
 
-            it.requestMatchers("/login/**", "/register/**", "/swagger-ui/**", "/api-docs/**", "/binance/**","/dolarapi/**", "/h2-console/**", "/actuator/**").permitAll() }
+            it.requestMatchers("/login/**", "/register/**", "/swagger-ui/**", "/api-docs/**", "/h2-console/**", "/actuator/**").permitAll() }
                 .authorizeHttpRequests { it.anyRequest().authenticated() }
 //            .authorizeHttpRequests { conf ->
 //                conf.requestMatchers("admin/**").hasAuthority("ADMIN")
