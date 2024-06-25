@@ -41,7 +41,7 @@ class PostController {
         val post: Post = Mapper.fromDtoToPost(postDTO)
         val createdPost = postService.intentPost(post, userId.toLong())
         val dolarPriceInArs = dollarApiService.getDolarCryptoPrice()
-        var response = Mapper.fromPostToResponsePostDTO(createdPost)
+        val response = Mapper.fromPostToResponsePostDTO(createdPost)
         response.priceInArs = dolarPriceInArs!!.compra.toFloat() * createdPost.amount!!
         return response
     }
@@ -63,7 +63,7 @@ class PostController {
         val posts = postService.getActivePost()
         val dolarPriceInArs = dollarApiService.getDolarCryptoPrice()
         return posts.map {
-            var dto = Mapper.fromPostToResponsePostDTO(it)
+            val dto = Mapper.fromPostToResponsePostDTO(it)
             dto.priceInArs = dolarPriceInArs!!.compra.toFloat() * it.amount!!
             dto
         }
