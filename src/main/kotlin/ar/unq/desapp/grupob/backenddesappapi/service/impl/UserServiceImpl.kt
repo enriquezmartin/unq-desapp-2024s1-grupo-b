@@ -20,13 +20,13 @@ class UserServiceImpl : UserService {
         return userDao.findByEmail(email)
     }
 
-    override fun findUserBYId(id: Long): UserEntity {
+    override fun findUserById(id: Long): UserEntity {
         return userDao.findById(id).get()
     }
 
     override fun loadUserByUsername(username: String?): UserDetails {
         val userdetails: UserEntity = userDao.findByEmail(username!!)
-            ?: throw UsernameNotFoundException("El usuario no existe")
+            ?: throw UsernameNotFoundException("User with email $username does not exist.")
 
         val authorities: Set<GrantedAuthority> = listOf(SimpleGrantedAuthority("ROLE_USER") ).toSet()
         return User(userdetails.email, userdetails.password, true, true, true, true, authorities)

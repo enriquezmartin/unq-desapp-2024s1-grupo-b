@@ -4,8 +4,6 @@ import ar.unq.desapp.grupob.backenddesappapi.dtos.OperationDTO
 import ar.unq.desapp.grupob.backenddesappapi.dtos.ReportDTO
 import ar.unq.desapp.grupob.backenddesappapi.model.CryptoOperation
 import ar.unq.desapp.grupob.backenddesappapi.model.OperationType
-import ar.unq.desapp.grupob.backenddesappapi.model.Price
-import ar.unq.desapp.grupob.backenddesappapi.model.UserEntity
 import ar.unq.desapp.grupob.backenddesappapi.service.CryptoOperationService
 import ar.unq.desapp.grupob.backenddesappapi.service.PriceService
 import ar.unq.desapp.grupob.backenddesappapi.service.UserService
@@ -29,7 +27,7 @@ class OperationController {
 
     @PostMapping("/notify_payout/{userId}/{postId}")
     fun notifyPayout(@PathVariable userId: String, @PathVariable postId: String): OperationDTO{
-        val user = userService.findUserBYId(userId.toLong())
+        val user = userService.findUserById(userId.toLong())
         val operation = operationService.payoutNotification(postId.toLong(), userId.toLong())
         val price = priceService.getLastPrice(operation.post!!.cryptoCurrency!!)
         val shippingAddress = when (operation.post!!.operationType) {
@@ -71,7 +69,7 @@ class OperationController {
     }
 
     private fun buildOperationDTO(userId: String, operation: CryptoOperation): OperationDTO {
-        val user = userService.findUserBYId(userId.toLong())
+        val user = userService.findUserById(userId.toLong())
         val price = priceService.getLastPrice(operation.post!!.cryptoCurrency!!)
         return OperationDTO(
             operation.post!!.cryptoCurrency!!,

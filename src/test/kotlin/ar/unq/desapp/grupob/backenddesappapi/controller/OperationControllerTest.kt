@@ -71,7 +71,7 @@ class OperationControllerTest {
             .withPost(post)
             .build()
 
-        `when`(userService.findUserBYId(userId)).thenReturn(owner)
+        `when`(userService.findUserById(userId)).thenReturn(owner)
         `when`(priceService.getLastPrice(price.cryptoCurrency!!)).thenReturn(price)
         `when`(operationService.payoutNotification(postId, userId)).thenReturn(operation)
 
@@ -129,7 +129,7 @@ class OperationControllerTest {
             .withPost(post)
             .build()
 
-        `when`(userService.findUserBYId(userId)).thenReturn(owner)
+        `when`(userService.findUserById(userId)).thenReturn(owner)
         `when`(priceService.getLastPrice(price.cryptoCurrency!!)).thenReturn(price)
         `when`(operationService.confirmOperation(operation.id!!, userId)).thenReturn(operation)
 
@@ -186,7 +186,7 @@ class OperationControllerTest {
             .withPost(post)
             .build()
 
-        `when`(userService.findUserBYId(userId)).thenReturn(owner)
+        `when`(userService.findUserById(userId)).thenReturn(owner)
         `when`(priceService.getLastPrice(price.cryptoCurrency!!)).thenReturn(price)
         `when`(operationService.cancelOperation(operation.id!!, userId)).thenReturn(operation)
 
