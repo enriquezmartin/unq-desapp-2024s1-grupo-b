@@ -9,6 +9,7 @@ import ar.unq.desapp.grupob.backenddesappapi.repository.CryptoOperationRepositor
 import ar.unq.desapp.grupob.backenddesappapi.repository.PostRepository
 import ar.unq.desapp.grupob.backenddesappapi.repository.PriceRepository
 import ar.unq.desapp.grupob.backenddesappapi.repository.UserRepository
+import net.bytebuddy.asm.Advice.Local
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -113,6 +114,37 @@ class CryptoOperationServiceTest {
         val result = service.cancelOperation(client.id!!, operation.id!!)
 
         assertEquals(result.client!!.score, 0)
+    }
+
+    @Test
+    fun reportTest(){
+        val start = LocalDateTime.now().minusDays(2)
+        val end = LocalDateTime.now()
+        val dollarPrice = PriceBuilder()
+            .withValue(10f)
+            .withCryptoCurrency(CryptoCurrency.USDAR)
+            .build()
+        val post = PostBuilder()
+            .withStatus(PostStatus.IN_PROGRESS)
+            .withAmount(10f)
+            .withCryptoCurrency(CryptoCurrency.AAVEUSDT)
+            .withPrice(10f)
+            .build()
+        val operation =
+            OperationBuilder()
+                .withPost(post)
+                .withId(1L)
+                .withDateTime(LocalDateTime.now())
+                .withStatus(OperationStatus.IN_PROGRESS)
+                .build()
+        `when`(priceRepository.findFirstByCryptoCurrencyOrderByPriceTimeDesc(CryptoCurrency.USDAR)).thenReturn(dollarPrice)
+        `when`(operationRepository.getByOwnerBetweenDates(1L, start, end)).thenReturn(listOf(operation))
+
+        val result = service.getReport(1L, start, end)
+        assertEquals(result.dateTime.truncatedTo(ChronoUnit.SECONDS), LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
+        assertEquals(result.totalInArs, 100f)
+        assertEquals(result.totalInDollars, 10f)
+
     }
 
 
