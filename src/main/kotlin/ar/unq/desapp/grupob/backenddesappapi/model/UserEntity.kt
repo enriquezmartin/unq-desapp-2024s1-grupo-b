@@ -5,7 +5,6 @@ import jakarta.persistence.*
 import java.lang.Integer.max
 import java.time.Duration
 import java.time.LocalDateTime
-import kotlin.math.min
 
 @Entity
 @Table(name = "users")

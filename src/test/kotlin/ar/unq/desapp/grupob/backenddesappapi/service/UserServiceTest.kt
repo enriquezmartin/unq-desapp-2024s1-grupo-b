@@ -5,7 +5,6 @@ import ar.unq.desapp.grupob.backenddesappapi.helpers.UserBuilder
 import ar.unq.desapp.grupob.backenddesappapi.repository.UserRepository
 import ar.unq.desapp.grupob.backenddesappapi.utils.UsernameAlreadyTakenException
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertDoesNotThrow
@@ -20,7 +19,6 @@ import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.util.*
-import javax.xml.crypto.Data
 
 @ExtendWith(SpringExtension :: class)
 @SpringBootTest

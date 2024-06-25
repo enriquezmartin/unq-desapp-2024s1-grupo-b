@@ -1,7 +1,6 @@
 package ar.unq.desapp.grupob.backenddesappapi.controller.advicer
 
 import ar.unq.desapp.grupob.backenddesappapi.utils.ForbiddenException
-import ar.unq.desapp.grupob.backenddesappapi.utils.PriceOutOfRangeException
 import ar.unq.desapp.grupob.backenddesappapi.utils.UserCannotBeRegisteredException
 import ar.unq.desapp.grupob.backenddesappapi.utils.UsernameAlreadyTakenException
 import org.slf4j.LoggerFactory
