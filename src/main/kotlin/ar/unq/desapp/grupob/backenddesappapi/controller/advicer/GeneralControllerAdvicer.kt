@@ -1,5 +1,6 @@
 package ar.unq.desapp.grupob.backenddesappapi.controller.advicer
 
+import ar.unq.desapp.grupob.backenddesappapi.utils.ForbiddenException
 import ar.unq.desapp.grupob.backenddesappapi.utils.PriceOutOfRangeException
 import ar.unq.desapp.grupob.backenddesappapi.utils.UserCannotBeRegisteredException
 import ar.unq.desapp.grupob.backenddesappapi.utils.UsernameAlreadyTakenException
@@ -31,9 +32,9 @@ class GeneralControllerAdvicer {
         return this.error(BAD_REQUEST, e)
     }
 
-    @ExceptionHandler(PriceOutOfRangeException::class)
+    @ExceptionHandler(ForbiddenException::class)
     fun handleOutOfPriceException(e: RuntimeException): ResponseEntity<String> {
-        return this.error(FORBIDDEN, e)
+        return this.error(NOT_FOUND, e)// cambiar
     }
     protected fun error(status: HttpStatus, e: RuntimeException): ResponseEntity<String> {
         logger.error(e.message)

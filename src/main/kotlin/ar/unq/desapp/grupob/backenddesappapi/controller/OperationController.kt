@@ -55,7 +55,7 @@ class OperationController {
         val operation = operationService.confirmOperation(userId.toLong(), operationId.toLong())
         return buildOperationDTO(userId, operation)
     }
-    @PostMapping("/notify_payout/{userId}/{operationId}")
+    @PostMapping("/cancel/{userId}/{operationId}")
     fun cancel(@PathVariable userId: String, @PathVariable operationId: String): OperationDTO{
         val operation = operationService.cancelOperation(userId.toLong(), operationId.toLong())
         return buildOperationDTO(userId, operation)

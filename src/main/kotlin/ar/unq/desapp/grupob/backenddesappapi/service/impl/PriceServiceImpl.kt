@@ -16,7 +16,7 @@ import org.springframework.cache.annotation.Cacheable
 @Transactional
 @Service
 @CacheConfig(cacheNames = ["prices"])
-class PriceServiceImpl : PriceService{
+class   PriceServiceImpl : PriceService{
     @Autowired
     lateinit var priceRepository: PriceRepository
     @Autowired
