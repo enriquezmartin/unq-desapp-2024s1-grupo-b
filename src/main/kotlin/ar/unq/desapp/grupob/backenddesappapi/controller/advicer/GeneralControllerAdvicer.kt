@@ -3,6 +3,7 @@ package ar.unq.desapp.grupob.backenddesappapi.controller.advicer
 import ar.unq.desapp.grupob.backenddesappapi.utils.ForbiddenException
 import ar.unq.desapp.grupob.backenddesappapi.utils.UserCannotBeRegisteredException
 import ar.unq.desapp.grupob.backenddesappapi.utils.UsernameAlreadyTakenException
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.*
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 @ControllerAdvice
 class GeneralControllerAdvicer {
 
-    val logger = LoggerFactory.getLogger(this.javaClass)
+    val logger: Logger = LoggerFactory.getLogger(this.javaClass)
 
     @ExceptionHandler(UsernameAlreadyTakenException::class)
     fun handleRunTimeException(e: RuntimeException): ResponseEntity<String> {
@@ -33,7 +34,7 @@ class GeneralControllerAdvicer {
 
     @ExceptionHandler(ForbiddenException::class)
     fun handleOutOfPriceException(e: RuntimeException): ResponseEntity<String> {
-        return this.error(NOT_FOUND, e)// cambiar
+        return this.error(BAD_REQUEST, e)
     }
     protected fun error(status: HttpStatus, e: RuntimeException): ResponseEntity<String> {
         logger.error(e.message)
