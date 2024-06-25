@@ -1,5 +1,6 @@
 package ar.unq.desapp.grupob.backenddesappapi.model
 
+import ar.unq.desapp.grupob.backenddesappapi.dtos.PostDTO
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -30,4 +31,12 @@ class Post(){
     @JoinColumn(name = "owner_id")
     var owner: UserEntity? = null
 
+    fun toDTO() : PostDTO {
+        return PostDTO(
+            price = this.price!!,
+            amount = this.amount!!,
+            cryptoCurrency = this.cryptoCurrency!!.name,
+            operation = this.operationType.toString()
+        )
+    }
 }
